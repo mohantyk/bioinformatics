@@ -8,6 +8,7 @@ Created on Wed Feb 19 20:36:08 2020
 from collections import Counter
 
 NUCLEOTIDES = {'A', 'C', 'G', 'T'}
+COMPLEMENTS = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
 
 def skew(genome):
     result = [0]   
@@ -76,7 +77,14 @@ def neighbors(pattern, d):
     return neighborhood
 
 
-def approximate_pattern_count(text, k, d):
+
+def reverse_complement(pattern):
+    table = str.maketrans(COMPLEMENTS)
+    complement_pattern = pattern.translate(table)
+    return complement_pattern[::-1]
+
+
+def approximate_pattern_count(text, k, d, check_complements=False):
     count = Counter()
     n = len(text)
 
@@ -84,6 +92,11 @@ def approximate_pattern_count(text, k, d):
         kmer = text[idx:idx+k]
         kmer_neighbors = neighbors(kmer, d)
         count.update(kmer_neighbors)
+        
+        if check_complements:
+            reversed_kmer = reverse_complement(kmer)
+            reversed_neighbors = neighbors(reversed_kmer, d)
+            count.update(reversed_neighbors)
     
     max_count = max(count.values())
     final = [kmer for kmer in count if count[kmer]==max_count]
