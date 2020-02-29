@@ -31,7 +31,7 @@ def min_skew(genome):
     for idx, val in enumerate(skew_values):
         if val == min_val:
             indices.append(idx)
-            
+    return indices
             
 
 def hamming(g1, g2):
