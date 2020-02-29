@@ -6,6 +6,7 @@ Created on Sat Feb 29 13:05:42 2020
 @author: kaniska
 """
 
+from math import log2
 from week2 import approx_pattern_match, neighbors
 
 
@@ -37,3 +38,16 @@ def motif_enumeration(dna, k , d):
                 motifs.add(mutated)
                 
     return motifs
+
+
+
+def entropy(distrib):
+    total = 0
+    assert( sum(distrib) == 1.0 )
+    for prob in distrib:
+        try:
+            total += prob*log2(prob)
+        except ValueError:
+            pass
+    
+    return -total
