@@ -8,6 +8,8 @@ Created on Sat Feb 29 13:05:42 2020
 
 from itertools import product
 from math import log2, inf
+from collections import defaultdict, Counter
+
 from week2 import approx_pattern_match, neighbors, hamming
 
 
@@ -88,7 +90,7 @@ def most_probable_kmer(dna, k, probs):
     ----------
     dna : dna string
     k : kmer length
-    probs : probability matrix, as a dictionary in hte form
+    probs : probability matrix, as a dictionary in the form
                 probs['A'] = [0.3, 0.2, 0.1]
 
     Returns
@@ -107,3 +109,31 @@ def most_probable_kmer(dna, k, probs):
             result = kmer
             max_prob = curr
     return result
+
+
+
+def create_profile_matrix(profile):
+    """
+    Create probability matrix
+
+    Parameters
+    ----------
+    profile: list of dna strings
+
+    Returns
+    -------
+    probs : probability matrix, as a dictionary in hte form
+                probs['A'] = [0.3, 0.2, 0.1]
+
+    """
+    t = len(profile)
+    n = len(profile[0])
+    probs = defaultdict(list)
+    count = Counter()
+    
+    for idx in range(n):
+        counter = Counter(dna[idx] for dna in profile)
+        for nucleotide in ('A', 'C', 'G', 'T'):
+            count = counter[nucleotide]
+            probs[nucleotide].append( count/t )
+    return probs
