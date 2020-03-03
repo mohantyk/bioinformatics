@@ -80,6 +80,34 @@ def median_string(dna, k):
             result = pattern
             min_distance = distance
     return result
+
+
+
+def profile_score(profile):
+    """
+    Calculates profile score 
+
+    Parameters
+    ----------
+    profile : list of dna strings
+
+    Returns
+    -------
+    score : number of mismatches with the best motif
+
+    """
+    n = len(profile[0])
+    correct = []
+    for idx in range(n):
+        count = Counter(dna[idx] for dna in profile)
+        correct.append(count.most_common(1)[0][0])
+    motif = ''.join(correct)
+    
+    score = 0
+    for dna in profile:
+        score += hamming(motif, dna)
+    return score
+
     
 
 def most_probable_kmer(dna, k, probs):
