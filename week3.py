@@ -79,3 +79,31 @@ def median_string(dna, k):
             min_distance = distance
     return result
     
+
+def most_probable_kmer(dna, k, probs):
+    """
+    Finds the most proabable kmer in a dna 
+
+    Parameters
+    ----------
+    dna : dna string
+    k : kmer length
+    probs : probability matrix, as a dictionary in hte form
+                probs['A'] = [0.3, 0.2, 0.1]
+
+    Returns
+    -------
+    most probable kmer string
+
+    """
+    n = len(dna)
+    max_prob = 0
+    for idx in range(n-k):
+        kmer = dna[idx:idx+k]
+        curr = 1.0
+        for i, n in enumerate(kmer):
+            curr *= probs[n][i]
+        if curr > max_prob:
+            result = kmer
+            max_prob = curr
+    return result
