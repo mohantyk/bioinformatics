@@ -165,3 +165,37 @@ def create_profile_matrix(profile):
             count = counter[nucleotide]
             probs[nucleotide].append( count/t )
     return probs
+
+
+
+def greedy_motif_search(dna, k):
+    """
+    Finds the best profile matrix for a list of dna strings
+
+    Parameters
+    ----------
+    dna : list of dna strings
+    k : length of motif
+
+
+    Returns
+    -------
+    profile matrix of the best motifs found
+
+    """
+    best_motifs = [gene[:k] for gene in dna]    
+    n = len(dna[0])
+    
+    for idx in range(n-k):
+        kmer0 = dna[0][idx:idx+k]
+        profile = [kmer0]
+        for i in range(1, len(dna)):
+            probs = create_profile_matrix( profile )
+            probable_kmer = most_probable_kmer(dna[i], k, probs)
+            profile.append(probable_kmer)
+        best_score = profile_score(best_motifs)
+        curr_score = profile_score(profile)
+        if curr_score < best_score:
+            best_motifs = profile
+        
+    return best_motifs
