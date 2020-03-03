@@ -6,8 +6,9 @@ Created on Sat Feb 29 13:05:42 2020
 @author: kaniska
 """
 
-from math import log2
-from week2 import approx_pattern_match, neighbors
+from itertools import product
+from math import log2, inf
+from week2 import approx_pattern_match, neighbors, hamming
 
 
 def motif_enumeration(dna, k , d):
@@ -51,3 +52,30 @@ def entropy(distrib):
             pass
     
     return -total
+
+
+def distance_from_dna(pattern, dna):
+    k = len(pattern)
+    total_distance = 0
+    for strand in dna:
+        min_distance = inf
+        for idx in range(len(strand)-k):
+            kmer = strand[idx:idx+k]
+            distance = hamming(kmer, pattern)
+            min_distance = min(distance, min_distance)
+        total_distance += min_distance
+    return total_distance
+
+
+def median_string(dna, k):
+    min_distance = inf
+    result = ''
+    for perm in product(['A', 'C', 'T', 'G'], repeat=k):
+        pattern = ''.join(perm)
+        distance = distance_from_dna(pattern, dna)
+        #print(pattern)
+        if distance < min_distance:
+            result = pattern
+            min_distance = distance
+    return result
+    
