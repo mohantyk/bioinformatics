@@ -75,7 +75,6 @@ def median_string(dna, k):
     for perm in product(['A', 'C', 'T', 'G'], repeat=k):
         pattern = ''.join(perm)
         distance = distance_from_dna(pattern, dna)
-        #print(pattern)
         if distance < min_distance:
             result = pattern
             min_distance = distance
