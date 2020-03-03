@@ -83,28 +83,28 @@ def median_string(dna, k):
 
 
 
-def profile_score(profile):
+def profile_score(motifs):
     """
     Calculates profile score 
 
     Parameters
     ----------
-    profile : list of dna strings
+    motifs : list of dna strings
 
     Returns
     -------
     score : number of mismatches with the best motif
 
     """
-    n = len(profile[0])
+    n = len(motifs[0])
     correct = []
     for idx in range(n):
-        count = Counter(dna[idx] for dna in profile)
+        count = Counter(dna[idx] for dna in motifs)
         correct.append(count.most_common(1)[0][0])
     motif = ''.join(correct)
     
     score = 0
-    for dna in profile:
+    for dna in motifs:
         score += hamming(motif, dna)
     return score
 
