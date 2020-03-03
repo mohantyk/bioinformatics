@@ -99,12 +99,12 @@ def most_probable_kmer(dna, k, probs):
 
     """
     n = len(dna)
-    max_prob = 0
+    max_prob = -1
     for idx in range(n-k):
         kmer = dna[idx:idx+k]
         curr = 1.0
-        for i, n in enumerate(kmer):
-            curr *= probs[n][i]
+        for i, nucleotide in enumerate(kmer):
+            curr *= probs[nucleotide][i]
         if curr > max_prob:
             result = kmer
             max_prob = curr
