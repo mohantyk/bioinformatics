@@ -4,6 +4,7 @@
 @author: kaniska
 """
 from random import randint, choice, choices
+from math import inf
 
 from week3 import create_profile_matrix, most_probable_kmer, profile_score
 
@@ -79,3 +80,17 @@ def gibbs_sampler(dna, k, t, N):
     return best_motifs
 
 
+
+def multiple_runs(num, func, *args):
+    best_score = inf
+    best_motifs = None
+    
+    for _ in range(num):
+        motifs = func(*args)
+        score = profile_score(motifs)
+        
+        if score < best_score:
+            best_score = score
+            best_motifs = motifs.copy()
+            
+    return best_motifs
