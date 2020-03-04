@@ -13,3 +13,13 @@ def composition(dna, k):
         
     return kmers
         
+
+def str_from_graph(kmers):
+    for idx, kmer in enumerate(kmers):
+        if idx == 0:
+            genome = kmer
+        else:
+            genome += kmer[-1]
+            
+    return genome
+
