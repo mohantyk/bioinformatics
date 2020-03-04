@@ -30,7 +30,7 @@ def motif_enumeration(dna, k , d):
     """
     n = len(dna[0])
     motifs = set()
-    for idx in range(n-k):
+    for idx in range(n-k+1):
         kmer = dna[0][idx:idx+k]
         for mutated in neighbors(kmer, d):
             for gene in dna[1:]:
@@ -61,7 +61,8 @@ def distance_from_dna(pattern, dna):
     total_distance = 0
     for strand in dna:
         min_distance = inf
-        for idx in range(len(strand)-k):
+        n = len(strand)
+        for idx in range(n-k+1):
             kmer = strand[idx:idx+k]
             distance = hamming(kmer, pattern)
             min_distance = min(distance, min_distance)
@@ -127,7 +128,7 @@ def most_probable_kmer(dna, k, probs):
     """
     n = len(dna)
     max_prob = -1
-    for idx in range(n-k):
+    for idx in range(n-k+1):
         kmer = dna[idx:idx+k]
         curr = 1.0
         for i, nucleotide in enumerate(kmer):
@@ -192,7 +193,7 @@ def greedy_motif_search(dna, k, pseudocount=True):
     best_motifs = [gene[:k] for gene in dna]    
     n = len(dna[0])
     
-    for idx in range(n-k):
+    for idx in range(n-k+1):
         kmer0 = dna[0][idx:idx+k]
         profile = [kmer0]
         for i in range(1, len(dna)):

@@ -66,9 +66,9 @@ def gibbs_sampler(dna, k, t, N):
         
         curr = dna[i]
         probs = [kmer_probability(curr[idx:idx+k], profile_matrix) 
-                 for idx in range(n-k)]   
+                 for idx in range(n-k+1)]   
 
-        [idx] = choices(range(n-k), probs)
+        [idx] = choices(range(n-k+1), probs)
         kmer = curr[idx: idx+k]
         motifs[i] = kmer
         

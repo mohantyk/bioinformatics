@@ -23,7 +23,7 @@ def find_kmer(dna, kmer):
     k = len(kmer)
     n = len(dna)
     found = []
-    for idx in range(n-k):
+    for idx in range(n-k+1):
         window = dna[idx:idx+k]
         if window == kmer:
             found.append(idx)
@@ -34,7 +34,7 @@ def find_kmer(dna, kmer):
 def kmer_frequency(dna, k):
     mycounter = defaultdict(int)
     n = len(dna)
-    for idx in range(n-k):
+    for idx in range(n-k+1):
         kmer = dna[idx:idx+k]
         mycounter[kmer] += 1
     return mycounter
@@ -56,7 +56,7 @@ def count_kmer(dna, kmer):
     k = len(kmer)
     n = len(dna)
     count = 0
-    for idx in range(n-k):
+    for idx in range(n-k+1):
         window = dna[idx:idx+k]
         if window == kmer:
             count += 1

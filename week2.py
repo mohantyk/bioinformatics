@@ -49,8 +49,7 @@ def approx_pattern_match(pattern, text, d):
     k = len(pattern)
     n = len(text) 
     indices = []
-    for idx in range(n):
-        if idx + k > n: break
+    for idx in range(n-k+1):
         window = text[idx:idx+k]
         if hamming(pattern, window) <= d:
             indices.append(idx)
@@ -88,7 +87,7 @@ def approximate_pattern_count(text, k, d, check_complements=False):
     count = Counter()
     n = len(text)
 
-    for idx in range(n-k):
+    for idx in range(n-k+1):
         kmer = text[idx:idx+k]
         kmer_neighbors = neighbors(kmer, d)
         count.update(kmer_neighbors)
