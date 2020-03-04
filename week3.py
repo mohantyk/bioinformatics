@@ -139,13 +139,14 @@ def most_probable_kmer(dna, k, probs):
 
 
 
-def create_profile_matrix(profile):
+def create_profile_matrix(profile, pseudocount=False):
     """
     Create probability matrix
 
     Parameters
     ----------
     profile: list of dna strings
+    pseudocount: set to True to add 1 to all counts
 
     Returns
     -------
@@ -158,16 +159,21 @@ def create_profile_matrix(profile):
     probs = defaultdict(list)
     count = Counter()
     
+    if pseudocount:
+        fudge = 1
+    else:
+        fudge = 0
+    
     for idx in range(n):
         counter = Counter(dna[idx] for dna in profile)
         for nucleotide in ('A', 'C', 'G', 'T'):
             count = counter[nucleotide]
-            probs[nucleotide].append( count/t )
+            probs[nucleotide].append( (count+fudge)/t )
     return probs
 
 
 
-def greedy_motif_search(dna, k):
+def greedy_motif_search(dna, k, pseudocount=False):
     """
     Finds the best profile matrix for a list of dna strings
 
@@ -175,6 +181,7 @@ def greedy_motif_search(dna, k):
     ----------
     dna : list of dna strings
     k : length of motif
+    pseudocount : set to True to use pseudocounts
 
 
     Returns
@@ -189,7 +196,7 @@ def greedy_motif_search(dna, k):
         kmer0 = dna[0][idx:idx+k]
         profile = [kmer0]
         for i in range(1, len(dna)):
-            probs = create_profile_matrix( profile )
+            probs = create_profile_matrix( profile, pseudocount )
             probable_kmer = most_probable_kmer(dna[i], k, probs)
             profile.append(probable_kmer)
         best_score = profile_score(best_motifs)
