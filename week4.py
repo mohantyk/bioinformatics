@@ -3,7 +3,7 @@
 """
 @author: kaniska
 """
-from random import randint, choice
+from random import randint, choice, choices
 
 from week3 import create_profile_matrix, most_probable_kmer, profile_score
 
@@ -59,22 +59,23 @@ def gibbs_sampler(dna, k, t, N):
     best_score = profile_score( best_motifs )
     
     for _ in range(N):
-        i = randint(t)
+        i = choice(range(t))
         new_motif = motifs[:i] + motifs[i+1:]
         profile_matrix = create_profile_matrix(new_motif)
+        
         curr = dna[i]
         probs = [kmer_probability(curr[idx:idx+k], profile_matrix) 
-                 for idx in range(n-k)]        
-        idx = choice(range(n-k), probs)
-        kmer = curr[idx]
+                 for idx in range(n-k)]   
+
+        [idx] = choices(range(n-k), probs)
+        kmer = curr[idx: idx+k]
         motifs[i] = kmer
         
         score = profile_score( motifs )
         if score < best_score:
-            best_motifs = motifs
+            best_motifs = motifs.copy()
             best_score = score
             
     return best_motifs
-        
 
-        
+
