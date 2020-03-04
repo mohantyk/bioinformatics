@@ -139,7 +139,7 @@ def most_probable_kmer(dna, k, probs):
 
 
 
-def create_profile_matrix(profile, pseudocount=False):
+def create_profile_matrix(profile, pseudocount=True):
     """
     Create probability matrix
 
@@ -173,7 +173,7 @@ def create_profile_matrix(profile, pseudocount=False):
 
 
 
-def greedy_motif_search(dna, k, pseudocount=False):
+def greedy_motif_search(dna, k, pseudocount=True):
     """
     Finds the best profile matrix for a list of dna strings
 
