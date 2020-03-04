@@ -5,6 +5,7 @@
 """
 
 from collections import defaultdict
+from itertools import product
 
 def composition(dna, k):
     n = len(dna)
@@ -26,11 +27,14 @@ def str_from_graph(kmers):
     return genome
 
 
+
 def suffix(kmer):
     return kmer[:-1]
 
 def prefix(kmer):
     return kmer[1:]
+
+
 
 def create_overlap_graph(kmers):
     adjacency = defaultdict( list )
@@ -45,3 +49,16 @@ def create_overlap_graph(kmers):
                 adjacency[head].append(tail)
     
     return adjacency
+
+
+
+def universal_k_str(k):
+    n = k + 2**k-1
+    for combo in product(('0', '1'), repeat=n):
+        bstr = ''.join(combo)
+        final = set()
+        for i in range(n-k+1):
+            final.add( bstr[i:i+k])
+            if len(final) == 2**k:
+                return bstr
+            
