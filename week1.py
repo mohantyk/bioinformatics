@@ -161,3 +161,36 @@ def node_degrees(adjacency):
     degrees = {k: (incoming[k], out[k]) for k in incoming}   
     return degrees
 
+
+
+def euler_path(adjacency):
+    degrees = node_degrees(adjacency)
+    unbalanced = set()
+    start = []
+    stop = []
+    for k, (inc, out) in degrees.items():
+        if inc != out :
+            unbalanced.add(k)
+            if inc > out :
+                stop.append(k)
+            else:
+                start.append(k)
+    
+    if len(unbalanced) not in (0,2):
+        raise ValueError
+
+    balanced = deepcopy(adjacency)
+    if unbalanced:
+        begin = start[0]
+        end = stop[0]
+        if end not in balanced:
+            balanced[end] = []
+        balanced[end].append( begin )
+        
+    path = euler_cycle(balanced)
+    if unbalanced:
+        path.pop()
+        while not (path[0]==begin and path[-1]==end):
+            path.rotate(-1)
+    
+    return path    
