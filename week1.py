@@ -21,6 +21,11 @@ def adjacency_to_file(adjacency, filename):
         for k, v in adjacency.items():
             f.write(f'{k} -> {", ".join(v)}\n')
             
+def path_to_file(path, filename):
+    path_str = '->'.join(str(node) for node in path)
+    with open(filename, 'w+') as f:
+        f.write(path_str+'\n')
+            
             
 def read_adjacency( filename ):
     with open(filename, 'r') as f:
