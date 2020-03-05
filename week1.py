@@ -104,9 +104,8 @@ def de_bruijn_from_kmers( kmers ):
 
 
 
-def euler_cycle(adjacency):
-    adjacency = dict(adjacency) # Copy adjacency matrix
-    start = 0
+def euler_cycle(adjacency_list, start=0):
+    adjacency = dict(adjacency_list) # Copy adjacency matrix
     path = deque([start])
     visited = {start}    
     
@@ -119,20 +118,17 @@ def euler_cycle(adjacency):
             curr = path[-1]
             try:
                 next_node = adjacency[curr].pop()
-            except IndexError: # No neighbors left
+            except (IndexError, KeyError): # No neighbors left
                 break
     
         if len(visited) == len(adjacency): # All done
             break
         
         path.pop()  # Remove the end node ( same as start node )
-        start = path[0]
         # Rotate cycle until we find a node with outgoing paths
-        while not len( adjacency[start]): 
-            node = path.popleft()
-            path.append(node)
-            start = path[0]
-        path.append( start ) # Complete cycle
+        while not len( adjacency[path[0]]): 
+            path.rotate(-1)
+        path.append( path[0] ) # Complete cycle
         
     return path
         
@@ -164,4 +160,3 @@ def node_degrees(adjacency):
     degrees = {k: (incoming[k], out[k]) for k in incoming}   
     return degrees
 
-      
