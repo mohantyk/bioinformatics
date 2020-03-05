@@ -62,3 +62,16 @@ def universal_k_str(k):
             if len(final) == 2**k:
                 return bstr
             
+
+
+def de_bruijn_graph(dna, k):
+    adjacency = defaultdict(list)
+    prev = None
+    n = len(dna)
+    for i in range(n-(k-1)+1):
+        kmer = dna[i:i+k-1]
+        if prev is not None:
+            adjacency[prev].append(kmer)
+        prev = kmer
+    return adjacency
+
