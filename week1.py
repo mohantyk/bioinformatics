@@ -105,6 +105,7 @@ def de_bruijn_from_kmers( kmers ):
 
 
 def euler_cycle(adjacency):
+    adjacency = dict(adjacency) # Copy adjacency matrix
     start = 0
     path = deque([start])
     visited = {start}    
