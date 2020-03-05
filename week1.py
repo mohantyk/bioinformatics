@@ -15,7 +15,7 @@ def prefix(kmer):
 def suffix(kmer):
     return kmer[1:]
 
-def adj_to_file(adjacency, filename):
+def adjacency_to_file(adjacency, filename):
     with open(filename, 'w') as f:        
         for k, v in adjacency.items():
             f.write(f'{k} -> {", ".join(v)}\n')
@@ -82,3 +82,9 @@ def de_bruijn_graph(dna, k):
         prev = kmer
     return adjacency
 
+
+def de_bruijn_from_kmers( kmers ):
+    adjacency = defaultdict(list)
+    for kmer in kmers:
+        adjacency[ prefix(kmer) ].append( suffix(kmer) )
+    return adjacency
