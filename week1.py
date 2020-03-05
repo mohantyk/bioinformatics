@@ -126,10 +126,12 @@ def euler_cycle(adjacency_list, start=0):
             break
         
         path.pop()  # Remove the end node ( same as start node )
+        start = path[0]
         # Rotate cycle until we find a node with outgoing paths
-        while not len( adjacency[path[0]]): 
+        while not len( adjacency[start]): 
             path.rotate(-1)
-        path.append( path[0] ) # Complete cycle
+            start = path[0]
+        path.append(start) # Complete cycle
         
     return path
         
