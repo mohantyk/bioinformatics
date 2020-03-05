@@ -21,6 +21,19 @@ def adjacency_to_file(adjacency, filename):
             f.write(f'{k} -> {", ".join(v)}\n')
             
             
+def read_adjacency( filename ):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        
+    adjacency = {}
+    for line in lines:
+        line = line[:-1]
+        (head, tails) = line.split(' -> ')
+        tails = tails.split(',')
+        adjacency[int(head)] = [int(node) for node in tails]
+    return adjacency
+            
+            
 
 def composition(dna, k):
     n = len(dna)
