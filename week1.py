@@ -9,10 +9,10 @@ from itertools import product
 
 
 # Helper functions
-def suffix(kmer):
+def prefix(kmer):
     return kmer[:-1]
 
-def prefix(kmer):
+def suffix(kmer):
     return kmer[1:]
 
 def adj_to_file(adjacency, filename):
@@ -52,7 +52,7 @@ def create_overlap_graph(kmers):
         for j in range(n):
             if i == j: continue
             tail = kmers[j]
-            if prefix(head) == suffix(tail):
+            if suffix(head) == prefix(tail):
                 adjacency[head].append(tail)
     
     return adjacency
