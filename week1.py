@@ -4,7 +4,7 @@
 @author: kaniska
 """
 
-from collections import defaultdict
+from collections import defaultdict, deque
 from itertools import product
 
 
@@ -88,3 +88,38 @@ def de_bruijn_from_kmers( kmers ):
     for kmer in kmers:
         adjacency[ prefix(kmer) ].append( suffix(kmer) )
     return adjacency
+
+
+
+def euler_cycle(adjacency):
+    start = 0
+    path = deque([start])
+    visited = {start}    
+    
+    while True:     
+        next_node = adjacency[start].pop()
+        
+        while True:  # Add a new cycle
+            path.append(next_node)
+            visited.add(next_node)
+            curr = path[-1]
+            try:
+                next_node = adjacency[curr].pop()
+            except IndexError: # No neighbors left
+                break
+    
+        if len(visited) == len(adjacency): # All done
+            break
+        
+        path.pop()  # Remove the end node ( same as start node )
+        start = path[0]
+        # Rotate cycle until we find a node with outgoing paths
+        while not len( adjacency[start]): 
+            node = path.popleft()
+            path.append(node)
+            start = path[0]
+        path.append( start ) # Complete cycle
+        
+    return path
+        
+        
