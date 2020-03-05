@@ -4,7 +4,7 @@
 @author: kaniska
 """
 
-from collections import defaultdict, deque
+from collections import defaultdict, deque, Counter
 from itertools import product
 
 
@@ -136,4 +136,32 @@ def euler_cycle(adjacency):
         
     return path
         
+  
+def node_degrees(adjacency):
+    """
+    Calculates in- and out-degrees of each node
+
+    Parameters
+    ----------
+    adjacency : adjacency list
+
+    Returns
+    -------
+    degrees : dictionary of {node: (in, out)} pairs
+
+    """
+    incoming = Counter()
+    out = {}
+    for k, v in adjacency.items():
+        incoming.update(v)
+        out[k] = len(v)
+    
+    for k in (out.keys() - incoming.keys()):
+        incoming[k] = 0       
+    for k in incoming.keys() - out.keys():
+        out[k] = 0
         
+    degrees = {k: (incoming[k], out[k]) for k in incoming}   
+    return degrees
+
+      
