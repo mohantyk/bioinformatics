@@ -7,6 +7,21 @@
 from collections import defaultdict
 from itertools import product
 
+
+# Helper functions
+def suffix(kmer):
+    return kmer[:-1]
+
+def prefix(kmer):
+    return kmer[1:]
+
+def adj_to_file(adjacency, filename):
+    with open(filename, 'w') as f:        
+        for k, v in adjacency.items():
+            f.write(f'{k} -> {", ".join(v)}\n')
+            
+            
+
 def composition(dna, k):
     n = len(dna)
     kmers = []
@@ -25,14 +40,6 @@ def str_from_graph(kmers):
             genome += kmer[-1]
             
     return genome
-
-
-
-def suffix(kmer):
-    return kmer[:-1]
-
-def prefix(kmer):
-    return kmer[1:]
 
 
 
