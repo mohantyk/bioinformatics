@@ -6,6 +6,7 @@
 
 from collections import defaultdict, deque, Counter
 from itertools import product
+from copy import deepcopy
 
 
 # Helper functions
@@ -105,7 +106,7 @@ def de_bruijn_from_kmers( kmers ):
 
 
 def euler_cycle(adjacency_list, start=0):
-    adjacency = dict(adjacency_list) # Copy adjacency matrix
+    adjacency = deepcopy(adjacency_list) # Copy adjacency matrix
     path = deque([start])
     visited = {start}    
     
