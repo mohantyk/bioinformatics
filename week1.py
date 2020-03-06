@@ -203,3 +203,12 @@ def euler_path(adjacency):
             path.rotate(-1)
     
     return path    
+
+
+
+def genome_from_path(path):
+    path = list(path)
+    genome = path[0]
+    for node in path[1:]:
+        genome += node[-1]
+    return genome
