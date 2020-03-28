@@ -12,7 +12,7 @@ from random import choice
 import logging
 logging.basicConfig()
 my_logger = logging.getLogger('MyLogger')
-my_logger.setLevel(logging.ERROR)
+my_logger.setLevel(logging.DEBUG)
 
 
 # Helper functions
@@ -214,7 +214,7 @@ def genome_from_path(path, d=None):
     return genome
 
 
-def find_contigs(graph):
+def find_contig_paths(graph):
     interior = []
     degrees = node_degrees(graph)
     for node, deg in degrees.items():
@@ -234,6 +234,4 @@ def find_contigs(graph):
                 if (nxt not in interior) or (not graph[node]):
                     paths.append(path)
                     break
-    my_logger.debug(f'Paths for contigs: {paths}')
-    contigs = [genome_from_path(path) for path in paths]
-    return contigs
+    return paths
