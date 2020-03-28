@@ -176,7 +176,7 @@ def euler_path(adjacency):
 
     my_logger.debug(f'Unbalanced nodes: {unbalanced}')
     if len(unbalanced) not in (0,2):
-        raise ValueError
+        raise ValueError(f'Number of unbalanced nodes is {len(unbalanced)}.')
 
     balanced = deepcopy(adjacency)
     if unbalanced:
