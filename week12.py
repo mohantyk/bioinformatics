@@ -214,3 +214,27 @@ def genome_from_path(path, d=None):
     return genome
 
 
+def find_contigs(graph):
+    interior = []
+    degrees = node_degrees(graph)
+    for node, deg in degrees.items():
+        if deg == (1,1):
+            interior.append(node)
+
+    paths = []
+    graph = deepcopy(graph)
+    all_nodes = list(degrees)
+    for start_node in all_nodes:
+        while graph[start_node]:
+            node = start_node
+            path = [node]
+            while True:
+                nxt = graph[node].pop()
+                path.append(nxt)
+                node = nxt
+                if (nxt not in interior) or (not graph[node]):
+                    paths.append(path)
+                    break
+
+    contigs = [genome_from_path(path) for path in paths]
+    return contigs
