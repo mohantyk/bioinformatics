@@ -9,10 +9,15 @@ from itertools import product
 from copy import deepcopy
 from random import choice
 
+import logging
+logging.basicConfig()
+my_logger = logging.getLogger('MyLogger')
+my_logger.setLevel(logging.ERROR)
+
 
 # Helper functions
 def prefix(kmer):
-    if isinstance(kmer, tuple): # Read pair 
+    if isinstance(kmer, tuple): # Read pair
         return tuple(prefix(pattern) for pattern in kmer)
     return kmer[:-1]
 
@@ -22,20 +27,20 @@ def suffix(kmer):
     return kmer[1:]
 
 def adjacency_to_file(adjacency, filename):
-    with open(filename, 'w') as f:        
+    with open(filename, 'w') as f:
         for k, v in adjacency.items():
             f.write(f'{k} -> {", ".join(v)}\n')
-            
+
 def path_to_file(path, filename):
     path_str = '->'.join(str(node) for node in path)
     with open(filename, 'w+') as f:
         f.write(path_str+'\n')
-            
-            
+
+
 def read_adjacency( filename ):
     with open(filename, 'r') as f:
         lines = f.readlines()
-        
+
     adjacency = {}
     for line in lines:
         line = line[:-1]
@@ -43,14 +48,14 @@ def read_adjacency( filename ):
         tails = tails.split(',')
         adjacency[int(head)] = [int(node) for node in tails]
     return adjacency
-            
-            
+
+
 def composition(dna, k):
     n = len(dna)
     kmers = []
     for idx in range(n-k+1):
         kmer = dna[idx:idx+k]
-        kmers.append(kmer)    
+        kmers.append(kmer)
     return kmers
 
 
@@ -70,7 +75,7 @@ def str_from_graph(kmers):
             genome = kmer
         else:
             genome += kmer[-1]
-            
+
     return genome
 
 
@@ -85,7 +90,7 @@ def create_overlap_graph(kmers):
             tail = kmers[j]
             if suffix(head) == prefix(tail):
                 adjacency[head].append(tail)
-    
+
     return adjacency
 
 
@@ -98,7 +103,7 @@ def universal_k_str(k):
             final.add( bstr[i:i+k])
             if len(final) == 2**k:
                 return bstr
-            
+
 
 def de_bruijn_graph(dna, k):
     adjacency = defaultdict(list)
@@ -123,11 +128,11 @@ def euler_cycle(adjacency_list):
     start = choice( list(adjacency_list.keys()) )
     adjacency = deepcopy(adjacency_list) # Copy adjacency matrix
     path = deque([start])
-    visited = {start}    
-    
-    while True:     
+    visited = {start}
+
+    while True:
         next_node = adjacency[start].pop()
-        
+
         while True:  # Add a new cycle
             path.append(next_node)
             visited.add(next_node)
@@ -136,21 +141,21 @@ def euler_cycle(adjacency_list):
                 next_node = adjacency[curr].pop()
             except (IndexError, KeyError): # No neighbors left
                 break
-    
+
         if len(visited) == len(adjacency): # All done
             break
-        
+
         path.pop()  # Remove the end node ( same as start node )
         start = path[0]
         # Rotate cycle until we find a node with outgoing paths
-        while not len( adjacency[start]): 
+        while not len( adjacency[start]):
             path.rotate(-1)
             start = path[0]
         path.append(start) # Complete cycle
-        
+
     return path
-        
-  
+
+
 def node_degrees(adjacency):
     """
     Calculates in- and out-degrees of each node
@@ -169,13 +174,13 @@ def node_degrees(adjacency):
     for k, v in adjacency.items():
         incoming.update(v)
         out[k] = len(v)
-    
+
     for k in (out.keys() - incoming.keys()):
-        incoming[k] = 0       
+        incoming[k] = 0
     for k in incoming.keys() - out.keys():
         out[k] = 0
-        
-    degrees = {k: (incoming[k], out[k]) for k in incoming}   
+
+    degrees = {k: (incoming[k], out[k]) for k in incoming}
     return degrees
 
 
@@ -191,7 +196,8 @@ def euler_path(adjacency):
                 stop.append(k)
             else:
                 start.append(k)
-    
+
+    my_logger.debug(f'Unbalanced nodes: {unbalanced}')
     if len(unbalanced) not in (0,2):
         raise ValueError
 
@@ -202,21 +208,31 @@ def euler_path(adjacency):
         if end not in balanced:
             balanced[end] = []
         balanced[end].append( begin )
-        
+
     path = euler_cycle(balanced)
     if unbalanced:
         path.pop()
         while not (path[0]==begin and path[-1]==end):
             path.rotate(-1)
-    
-    return path    
+
+    return path
 
 
-def genome_from_path(path):
+def genome_from_path(path, d=None):
     path = list(path)
-    genome = path[0]
-    for node in path[1:]:
-        genome += node[-1]
+    if not isinstance(path[0], tuple): # Simple kmers
+        genome = path[0]
+        for node in path[1:]:
+            genome += node[-1]
+    else :                              # Paired reads
+        # TODO: Check if the path is a valid solution
+        genome = path[0][0]             # Pattern 1
+        for node in path[1:]:
+            genome += node[0][-1]
+        for node in path[-(d+1):]: # Fill in d missing nucleotides in the final pair
+            genome += node[1][0]
+        genome += path[-1][1]
+
     return genome
 
 
