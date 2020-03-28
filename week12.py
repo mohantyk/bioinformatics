@@ -26,29 +26,6 @@ def suffix(kmer):
         return tuple(suffix(pattern) for pattern in kmer)
     return kmer[1:]
 
-def adjacency_to_file(adjacency, filename):
-    with open(filename, 'w') as f:
-        for k, v in adjacency.items():
-            f.write(f'{k} -> {", ".join(v)}\n')
-
-def path_to_file(path, filename):
-    path_str = '->'.join(str(node) for node in path)
-    with open(filename, 'w+') as f:
-        f.write(path_str+'\n')
-
-
-def read_adjacency( filename ):
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-
-    adjacency = {}
-    for line in lines:
-        line = line[:-1]
-        (head, tails) = line.split(' -> ')
-        tails = tails.split(',')
-        adjacency[int(head)] = [int(node) for node in tails]
-    return adjacency
-
 
 def composition(dna, k):
     n = len(dna)
