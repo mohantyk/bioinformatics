@@ -6,7 +6,7 @@ def read_adjacency( filename ):
         lines = f.readlines()
     adjacency = {}
     for line in lines:
-        line = line[:-1]
+        line = line.strip()
         (head, tails) = line.split(' -> ')
         tails = tails.split(',')
         adjacency[int(head)] = [int(node) for node in tails]
