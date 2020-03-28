@@ -12,9 +12,13 @@ from random import choice
 
 # Helper functions
 def prefix(kmer):
+    if isinstance(kmer, tuple): # Read pair 
+        return tuple(prefix(pattern) for pattern in kmer)
     return kmer[:-1]
 
 def suffix(kmer):
+    if isinstance(kmer, tuple): # Read pair
+        return tuple(suffix(pattern) for pattern in kmer)
     return kmer[1:]
 
 def adjacency_to_file(adjacency, filename):
@@ -41,7 +45,6 @@ def read_adjacency( filename ):
     return adjacency
             
             
-
 def composition(dna, k):
     n = len(dna)
     kmers = []
@@ -62,7 +65,6 @@ def str_from_graph(kmers):
     return genome
 
 
-
 def create_overlap_graph(kmers):
     adjacency = defaultdict( list )
 
@@ -78,7 +80,6 @@ def create_overlap_graph(kmers):
     return adjacency
 
 
-
 def universal_k_str(k):
     n = k + 2**k-1
     for combo in product(('0', '1'), repeat=n):
@@ -89,7 +90,6 @@ def universal_k_str(k):
             if len(final) == 2**k:
                 return bstr
             
-
 
 def de_bruijn_graph(dna, k):
     adjacency = defaultdict(list)
@@ -108,7 +108,6 @@ def de_bruijn_from_kmers( kmers ):
     for kmer in kmers:
         adjacency[ prefix(kmer) ].append( suffix(kmer) )
     return adjacency
-
 
 
 def euler_cycle(adjacency_list):
@@ -171,7 +170,6 @@ def node_degrees(adjacency):
     return degrees
 
 
-
 def euler_path(adjacency):
     degrees = node_degrees(adjacency)
     unbalanced = set()
@@ -205,10 +203,11 @@ def euler_path(adjacency):
     return path    
 
 
-
 def genome_from_path(path):
     path = list(path)
     genome = path[0]
     for node in path[1:]:
         genome += node[-1]
     return genome
+
+
