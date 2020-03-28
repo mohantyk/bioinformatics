@@ -223,8 +223,7 @@ def find_contigs(graph):
 
     paths = []
     graph = deepcopy(graph)
-    all_nodes = list(degrees)
-    for start_node in all_nodes:
+    for start_node in graph:
         while graph[start_node]:
             node = start_node
             path = [node]
@@ -235,6 +234,6 @@ def find_contigs(graph):
                 if (nxt not in interior) or (not graph[node]):
                     paths.append(path)
                     break
-
+    my_logger.debug(f'Paths for contigs: {paths}')
     contigs = [genome_from_path(path) for path in paths]
     return contigs
