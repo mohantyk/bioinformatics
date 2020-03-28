@@ -224,15 +224,16 @@ def genome_from_path(path, d=None):
         genome = path[0]
         for node in path[1:]:
             genome += node[-1]
-    else :                              # Paired reads
+    else :                              # Paired reads, each node in the path is a tuple
         # TODO: Check if the path is a valid solution
-        genome = path[0][0]             # Pattern 1
+        genome = path[0][0]             # Pattern1 of first node
         for node in path[1:]:
             genome += node[0][-1]
-        for node in path[-(d+1):]: # Fill in d missing nucleotides in the final pair
+        my_logger.debug(f'Genome constructed only from pattern1 : {genome}')
+        for node in path[-(d+2):-1]: # Fill in d missing nucleotides in the final pair
             genome += node[1][0]
+        my_logger.debug(f'Genome after filling in the missing parts of the final read : {genome}')
         genome += path[-1][1]
-
     return genome
 
 
