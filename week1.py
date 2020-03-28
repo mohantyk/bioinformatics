@@ -50,10 +50,19 @@ def composition(dna, k):
     kmers = []
     for idx in range(n-k+1):
         kmer = dna[idx:idx+k]
-        kmers.append(kmer)
-        
+        kmers.append(kmer)    
     return kmers
-        
+
+
+def read_pairs(genome, k, d):
+    reads = []
+    n = len(genome)
+    for i in range(n-(2*k+d)+1):
+        pat1 = genome[i:i+k]
+        pat2 = genome[i+k+d:i+2*k+d]
+        reads.append((pat1, pat2))
+    return reads
+
 
 def str_from_graph(kmers):
     for idx, kmer in enumerate(kmers):
