@@ -17,9 +17,14 @@ def get_rna_table():
     return codon_to_amino
 
 CODON_2_AMINO = get_rna_table()
+AMINO_NAMES = {'Leu': 'L', 'Arg': 'R', 'Pro': 'P', 'Gln': 'Q', 'His': 'H',
+                'Met': 'M', 'Ile': 'I', 'Ser': 'S', 'Thr': 'T', 'Lys': 'K', 'Asn': 'N',
+                'Phe': 'F', 'Trp': 'W', 'Cys': 'C', 'Tyr': 'Y',
+                'Val': 'V', 'Gly': 'G', 'Ala': 'A', 'Glu': 'E', 'Asp':'D'}
+AMINO_SYMBOLS = {v: k for k, v in AMINO_NAMES.items()}
 
 
-def rna_to_protein(rna):
+def rna_to_peptide(rna):
     n = len(rna)
     peptide = []
     for idx in range(0, n, 3):
@@ -27,8 +32,8 @@ def rna_to_protein(rna):
         amino_acid = CODON_2_AMINO[codon]
         if amino_acid:
             peptide.append(amino_acid)
-    protein = ''.join(peptide)
-    return protein
+    final_peptide = ''.join(peptide)
+    return final_peptide
 
 def dna_to_rna(dna):
     return dna.replace('T','U')
@@ -40,8 +45,8 @@ def peptide_to_dna(dna, peptide):
     for i in range(n-k+1):
         kmer = dna[i:i+k]
         reverse_kmer = reverse_complement(kmer)
-        if ((rna_to_protein(dna_to_rna(kmer)) == peptide) or
-            (rna_to_protein(dna_to_rna(reverse_kmer)) == peptide)):
+        if ((rna_to_peptide(dna_to_rna(kmer)) == peptide) or
+            (rna_to_peptide(dna_to_rna(reverse_kmer)) == peptide)):
             candidates.append(kmer)
     return candidates
 
