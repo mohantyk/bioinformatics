@@ -16,7 +16,17 @@ def get_rna_table():
             codon_to_amino[codon] = rna
     return codon_to_amino
 
+def get_amino_mass():
+    mass_table_file = 'integer_mass_table.txt'
+    mass_table = {}
+    with open(mass_table_file, 'r') as f:
+        for line in f:
+            amino, mass = line.strip().split()
+            mass_table[amino] = int(mass)
+    return mass_table
+
 CODON_2_AMINO = get_rna_table()
+AMINO_MASS = get_amino_mass()
 AMINO_NAMES = {'Leu': 'L', 'Arg': 'R', 'Pro': 'P', 'Gln': 'Q', 'His': 'H',
                 'Met': 'M', 'Ile': 'I', 'Ser': 'S', 'Thr': 'T', 'Lys': 'K', 'Asn': 'N',
                 'Phe': 'F', 'Trp': 'W', 'Cys': 'C', 'Tyr': 'Y',
