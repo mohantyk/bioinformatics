@@ -215,15 +215,19 @@ def genome_from_path(path, d=None):
 
 
 def find_contig_paths(graph):
-    interior = []
+    interior = set()
     degrees = node_degrees(graph)
     for node, deg in degrees.items():
         if deg == (1,1):
-            interior.append(node)
+            interior.add(node)
 
+    unused = interior.copy() # Unused interior nodes
     paths = []
     graph = deepcopy(graph)
     for start_node in graph:
+        if start_node in interior:
+            continue
+
         while graph[start_node]:
             node = start_node
             path = [node]
@@ -234,4 +238,20 @@ def find_contig_paths(graph):
                 if (nxt not in interior) or (not graph[node]):
                     paths.append(path)
                     break
+                else:
+                    unused.remove(node)
+
+    # Cycles
+    for start_node in unused:
+        while graph[start_node]:
+            node = start_node
+            path = [node]
+            while True:
+                nxt = graph[node].pop()
+                path.append(nxt)
+                node = nxt
+                if (not graph[node]):
+                    paths.append(path)
+                    break
+
     return paths
