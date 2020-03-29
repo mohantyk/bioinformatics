@@ -60,3 +60,14 @@ def peptide_to_dna(dna, peptide):
             candidates.append(kmer)
     return candidates
 
+def linear_spectrum(peptide):
+    n = len(peptide)
+    cumsum = [0]*(len(peptide)+1)
+    for i, aa in enumerate(peptide):
+        cumsum[i+1] = cumsum[i] + AMINO_MASS[aa]
+    spectrum = [0]
+    for start in range(1, n+1):
+        for stop in range(start, n+1): # stop is included
+            spectrum.append(cumsum[stop]-cumsum[start-1])
+    linear_spectrum = sorted(spectrum)
+    return linear_spectrum
