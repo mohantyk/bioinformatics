@@ -1,3 +1,5 @@
+from collections import Counter
+
 import sys
 sys.path.append('..')
 
@@ -27,6 +29,7 @@ def get_amino_mass():
 
 CODON_2_AMINO = get_rna_table()
 AMINO_MASS = get_amino_mass()
+MASS_2_AMINO = {v:k for k,v in AMINO_MASS.items()}
 AMINO_NAMES = {'Leu': 'L', 'Arg': 'R', 'Pro': 'P', 'Gln': 'Q', 'His': 'H',
                 'Met': 'M', 'Ile': 'I', 'Ser': 'S', 'Thr': 'T', 'Lys': 'K', 'Asn': 'N',
                 'Phe': 'F', 'Trp': 'W', 'Cys': 'C', 'Tyr': 'Y',
@@ -78,3 +81,28 @@ def spectrum(peptide, cyclic=True):
                 spectrum.append(cyclic_kmer_mass)
     final_spectrum = sorted(spectrum)
     return final_spectrum
+
+
+def consistent(peptide_spectrum, mass_spectrum):
+    p_count = Counter(peptide_spectrum)
+    m_count = Counter(mass_spectrum)
+    for mass in peptide_spectrum:
+        if p_count[mass] > m_count[mass]:
+            return False
+    return True
+
+def cyclopeptide_sequencing(mass_spectrum):
+    candidates = set([''])
+    final_peptides = []
+    while candidates:
+        candidates = set(candidate+aa for candidate in candidates
+                                    for aa in MASS_2_AMINO.values())
+        new_candidates = candidates.copy() # Can not change candidates while iterating over it
+        for candidate in new_candidates:
+            c_spectrum = spectrum(candidate, cyclic=True)
+            l_spectrum = spectrum(candidate, cyclic=False)
+            if c_spectrum == mass_spectrum:
+              final_peptides.append(candidate)
+            elif not consistent(l_spectrum, mass_spectrum):
+                candidates.remove(candidate)
+    return final_peptides
