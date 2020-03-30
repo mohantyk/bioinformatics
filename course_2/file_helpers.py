@@ -1,6 +1,11 @@
 
 ## File Read Helpers
 
+def get_data(filename):
+    with open(filename) as f:
+        data = f.readlines()
+    return data
+
 def read_adjacency( filename ):
     with open(filename, 'r') as f:
         lines = f.readlines()
@@ -12,10 +17,8 @@ def read_adjacency( filename ):
         adjacency[int(head)] = [int(node) for node in tails]
     return adjacency
 
-
 def transform_pairs_to_tuples(paired_read):
     return tuple(paired_read.split('|'))
-
 
 def read_pairs(filename):
     with open(filename, 'r') as f:
