@@ -1,5 +1,7 @@
 
 ## File Read Helpers
+def convert_to_list(list_with_spaces):
+    return [int(x) for x in list_with_spaces.split()]
 
 def get_data(filename):
     with open(filename) as f:
