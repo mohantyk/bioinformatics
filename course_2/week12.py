@@ -12,7 +12,7 @@ from random import choice
 import logging
 logging.basicConfig()
 my_logger = logging.getLogger('MyLogger')
-my_logger.setLevel(logging.DEBUG)
+my_logger.setLevel(logging.ERROR)
 
 
 # Helper functions
