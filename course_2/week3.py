@@ -36,6 +36,8 @@ AMINO_NAMES = {'Leu': 'L', 'Arg': 'R', 'Pro': 'P', 'Gln': 'Q', 'His': 'H',
                 'Val': 'V', 'Gly': 'G', 'Ala': 'A', 'Glu': 'E', 'Asp':'D'}
 AMINO_SYMBOLS = {v: k for k, v in AMINO_NAMES.items()}
 
+def name_in_masses(peptide):
+    return '-'.join(str(AMINO_MASS[aa]) for aa in peptide)
 
 def rna_to_peptide(rna):
     n = len(rna)
