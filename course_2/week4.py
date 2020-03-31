@@ -69,3 +69,11 @@ def leaderboard_cyclopeptide_sequencing(mass_spectrum, N):
         leaderboard = trim(leaderboard, mass_spectrum, N)
 
     return all_leaders
+
+
+def convolution(spectra):
+    diffs = []
+    for idx, mass1  in enumerate(spectra):
+        for mass2 in spectra[:idx]:
+            diffs.append(mass1-mass2)
+    return diffs
