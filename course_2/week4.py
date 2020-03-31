@@ -17,6 +17,8 @@ def spectrum_score(peptide_spectrum, ref_spectrum):
     return score
 
 def trim(peptides, ref_spectrum, N):
+    if not peptides: # Empty set
+        return []
     scores = {}
     for peptide in peptides:
         l_spectrum = spectrum(peptide, False)
