@@ -39,7 +39,9 @@ def trim(peptides, ref_spectrum, N):
 def leaderboard_cyclopeptide_sequencing(mass_spectrum, N):
     leaderboard = set([''])
     leader_peptide = ''
+    all_leaders = []
     parent_mass = mass_spectrum[-1]
+
     while leaderboard:
         leaderboard = set(candidate+aa for candidate in leaderboard
                                         for aa in MASS_2_AMINO.values())
@@ -53,11 +55,17 @@ def leaderboard_cyclopeptide_sequencing(mass_spectrum, N):
                 candidate_score = spectrum_score(c_spectrum, mass_spectrum)
                 leader_score = spectrum_score(leader_spectrum, mass_spectrum)
                 week4_logger.debug(f'{candidate} : {candidate_score} <> {leader_peptide} : {leader_score}')
+
                 if candidate_score > leader_score:
                     leader_peptide = candidate
                     leader_spectrum = spectrum(leader_peptide, cyclic=True)
+                    all_leaders.clear()
+                    all_leaders.append(leader_peptide)
+                elif candidate_score == leader_score:
+                    all_leaders.append(candidate)
+
             elif peptide_mass > parent_mass:
                 leaderboard.remove(candidate)
         leaderboard = trim(leaderboard, mass_spectrum, N)
 
-    return leader_peptide
+    return all_leaders
