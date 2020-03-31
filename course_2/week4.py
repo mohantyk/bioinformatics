@@ -17,12 +17,20 @@ def spectrum_score(peptide_spectrum, ref_spectrum):
     return score
 
 def trim(peptides, ref_spectrum, N):
-    scores = Counter()
+    scores = {}
     for peptide in peptides:
         l_spectrum = spectrum(peptide, False)
         score = spectrum_score(l_spectrum, ref_spectrum)
         scores[peptide] = score
-    trimmed = [x[0] for x in scores.most_common(N)] # Does not account for ties
+    ranked = sorted(scores, key=scores.get, reverse=True)
+
+    trimmed = ranked[:N]
+    lowest_rank = scores[trimmed[-1]]
+    for peptide in ranked[N:]:
+        if scores[peptide] < lowest_rank:
+            break
+        else:
+            trimmed.append(peptide)
     return trimmed
 
 
