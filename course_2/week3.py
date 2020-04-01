@@ -71,10 +71,17 @@ def peptide_to_dna(dna, peptide):
 
 
 def spectrum(peptide, cyclic=True):
-    n = len(peptide)
-    cumsum = [0]*(len(peptide)+1)
-    for i, aa in enumerate(peptide):
-        cumsum[i+1] = cumsum[i] + AMINO_MASS[aa]
+    if peptide == '': # Corner case, empty peptide
+        return [0]
+
+    if not peptide.isalpha():  # Peptide specified in mass format, e.g., 99-71-137
+        masses = [int(mass) for mass in peptide.split('-')]
+    else:
+        masses = [AMINO_MASS[aa] for aa in peptide]
+    n = len(masses)
+    cumsum = [0]*(n+1)
+    for i, mass in enumerate(masses):
+        cumsum[i+1] = cumsum[i] + mass
     peptide_mass = cumsum[-1]
 
     spectrum = [0]
