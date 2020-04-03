@@ -1,5 +1,6 @@
 from math import inf
 import numpy as np
+from collections import defaultdict
 
 def dp_change(money, coins):
     '''
@@ -84,3 +85,37 @@ def get_lcs(v, w):
             j -= 1
     lcs = ''.join(reversed_lcs[::-1])
     return lcs
+
+
+def longest_path(start, stop, adjacency):
+    '''
+    parameters:
+        start: starting node
+        stop: stopping node
+        adjacency: dictionary of {node: [(nghbr, weight)...]}
+    output:
+        value of longest path
+        longest path
+    '''
+    predecessors = defaultdict(list)
+    for node, successors in adjacency.items():
+        for (s_node, weight) in successors:
+            predecessors[s_node].append((node, weight))
+
+    backtrack = {}
+    path_value = defaultdict(int)
+    for node in range(start, stop+1):
+        for pred, weight in predecessors[node]:
+            if path_value[pred] + weight > path_value[node]:
+                path_value[node] = path_value[pred] + weight
+                backtrack[node] = pred
+    longest_path_value = path_value[stop]
+
+    node = stop
+    rpath = [node]
+    while node != start:
+        prev_node = backtrack[node]
+        rpath.append(prev_node)
+        node = prev_node
+    path = rpath[::-1]
+    return longest_path_value, path
