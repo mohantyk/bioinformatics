@@ -4,7 +4,7 @@ import numpy as np
 BLOSUM62 = pd.read_csv('BLOSUM62.csv')
 PAM250 = pd.read_csv('PAM250.csv')
 
-def global_alignment(v, w, score_table, indel_penalty=5):
+def global_alignment(v, w, score_table, indel_penalty=5, local_match=False):
     '''
     score_table : pandas table
     '''
@@ -25,13 +25,19 @@ def global_alignment(v, w, score_table, indel_penalty=5):
             right_path = longest_path[i, j-1] - indel_penalty
             diag_path = longest_path[i-1, j-1] + score_table.loc[v[i-1], w[j-1]]
 
-            longest_path[i, j] = max(down_path, right_path, diag_path)
+            if local_match:
+                longest_path[i, j] = max(0, down_path, right_path, diag_path)
+            else:
+                longest_path[i, j] = max(down_path, right_path, diag_path)
+
             if longest_path[i, j] == down_path:
                 backtrack[i, j] = 'U'
             elif longest_path[i, j] == right_path:
                 backtrack[i, j] = 'L'
-            else:
+            elif longest_path[i, j] == diag_path:
                 backtrack[i, j] = 'D'
+            elif local_match and longest_path[i, j] == 0:
+                backtrack[i, j] = 'S' # Source
 
     rev_v = []
     rev_w = []
@@ -47,12 +53,19 @@ def global_alignment(v, w, score_table, indel_penalty=5):
             rev_v.append('-')
             rev_w.append(w[j-1])
             j -= 1
-        else:
+        elif direction == 'D':
             rev_v.append(v[i-1])
             rev_w.append(w[j-1])
             i -= 1
             j -= 1
+        elif direction == 'S':
+            break
+
+    if not local_match:
+        final_score = longest_path[n, m]
+    else:
+        final_score = np.amax(longest_path)
 
     align_v = ''.join(rev_v[::-1])
     align_w = ''.join(rev_w[::-1])
-    return longest_path[n, m], align_v, align_w
+    return final_score, align_v, align_w
