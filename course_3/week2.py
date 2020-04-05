@@ -1,11 +1,16 @@
 import pandas as pd
 import numpy as np
 
-def global_alignment(v, w, indel_penalty=5):
+BLOSUM62 = pd.read_csv('BLOSUM62.csv')
+PAM250 = pd.read_csv('PAM250.csv')
+
+def global_alignment(v, w, score_table, indel_penalty=5):
+    '''
+    score_table : pandas table
+    '''
     n = len(v)
     m = len(w)
 
-    score_table = pd.read_csv('BLOSUM62.csv')
     longest_path = np.zeros((n+1, m+1), dtype=int)
     longest_path[0, :] = np.arange(0, (m+1))*(-indel_penalty)
     longest_path[:, 0] = np.arange(0, (n+1))*(-indel_penalty)
