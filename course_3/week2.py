@@ -41,7 +41,13 @@ def global_alignment(v, w, score_table, indel_penalty=5, local_match=False):
 
     rev_v = []
     rev_w = []
-    i, j = len(v), len(w)
+    if local_match:
+        final_score = np.amax(longest_path)
+        max_index = np.argmax(longest_path)
+        (i, j) = np.unravel_index(max_index, longest_path.shape)
+    else:
+        final_score = longest_path[n, m]
+        i, j = n, m
 
     while (i, j) != (0, 0):
         direction = backtrack[i, j]
@@ -60,11 +66,6 @@ def global_alignment(v, w, score_table, indel_penalty=5, local_match=False):
             j -= 1
         elif direction == 'S':
             break
-
-    if not local_match:
-        final_score = longest_path[n, m]
-    else:
-        final_score = np.amax(longest_path)
 
     align_v = ''.join(rev_v[::-1])
     align_w = ''.join(rev_w[::-1])
