@@ -7,14 +7,17 @@ def global_alignment(v, w, indel_penalty=5):
 
     score_table = pd.read_csv('BLOSUM62.csv')
     longest_path = np.zeros((n+1, m+1), dtype=int)
+    longest_path[0, :] = np.arange(0, (m+1))*(-indel_penalty)
+    longest_path[:, 0] = np.arange(0, (n+1))*(-indel_penalty)
+
     backtrack = np.empty((n+1, m+1), dtype=str)
     backtrack[0, :] = 'L'
     backtrack[:, 0] = 'U'
 
     for i in range(1, n+1):
         for j in range(1, m+1):
-            down_path = longest_path[i-1, j] + indel_penalty
-            right_path = longest_path[i, j-1] + indel_penalty
+            down_path = longest_path[i-1, j] - indel_penalty
+            right_path = longest_path[i, j-1] - indel_penalty
             diag_path = longest_path[i-1, j-1] + score_table.loc[v[i-1], w[j-1]]
 
             longest_path[i, j] = max(down_path, right_path, diag_path)
@@ -47,4 +50,4 @@ def global_alignment(v, w, indel_penalty=5):
 
     align_v = ''.join(rev_v[::-1])
     align_w = ''.join(rev_w[::-1])
-    return align_v, align_w
+    return longest_path[n, m], align_v, align_w
