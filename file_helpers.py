@@ -42,6 +42,19 @@ def read_pairs(filename):
     kmer_pairs = [transform_pairs_to_tuples(line.strip()) for line in data[1:]]
     return k, d, kmer_pairs
 
+def convert_txt_to_csv(filename):
+    '''
+    Converts a space separated columnar text file to a csv file
+    '''
+    csv_file = filename.replace('.txt', '.csv')
+    csv_lines = []
+    with open(filename, 'r') as f:
+        for line in f:
+            csv_lines.append(','.join(line.split()))
+
+    with open(csv_file, 'w') as f:
+        f.write('\n'.join(csv_lines))
+
 ### File Write Helpers
 
 def adjacency_to_file(adjacency, filename):
