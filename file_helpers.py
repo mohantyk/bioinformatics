@@ -42,6 +42,9 @@ def read_pairs(filename):
     kmer_pairs = [transform_pairs_to_tuples(line.strip()) for line in data[1:]]
     return k, d, kmer_pairs
 
+#-------------------------------------------------------------------------------
+# Converters
+
 def convert_txt_to_csv(filename):
     '''
     Converts a space separated columnar text file to a csv file
@@ -51,9 +54,15 @@ def convert_txt_to_csv(filename):
     with open(filename, 'r') as f:
         for line in f:
             csv_lines.append(','.join(line.split()))
-
     with open(csv_file, 'w') as f:
         f.write('\n'.join(csv_lines))
+
+
+def char2int(char):
+    return ord(char) - ord('a')
+
+def int2char(num):
+    return chr(97+num)
 
 ### File Write Helpers
 
