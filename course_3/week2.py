@@ -6,6 +6,18 @@ import numpy as np
 BLOSUM62 = pd.read_csv('BLOSUM62.csv')
 PAM250 = pd.read_csv('PAM250.csv')
 
+def create_scoring_table(match, mismatch_penalty):
+    '''
+    match: points for a match
+    mismatch_penalty: penalty for a mismatch (positive number, will be subtracted)
+    '''
+    data = -mismatch_penalty * np.ones((26, 26), int)
+    np.fill_diagonal(data, 1)
+    chars = list(string.ascii_uppercase)
+    score_table = pd.DataFrame(data, index=chars, columns=chars)
+    return score_table
+
+
 def global_alignment(v, w, score_table, indel_penalty=5, local_match=False):
     '''
     score_table : pandas table
@@ -75,11 +87,7 @@ def global_alignment(v, w, score_table, indel_penalty=5, local_match=False):
 
 
 def edit_distance(v, w):
-    data = -np.ones((26, 26), int)
-    np.fill_diagonal(data, 0)
-    chars = list(string.ascii_uppercase)
-    metrics = pd.DataFrame(data, index=chars, columns=chars)
-
+    metrics = create_scoring_table(0, 1)
     n, _, _ = global_alignment(v, w, metrics, 1)
     return -n
 
@@ -88,11 +96,7 @@ def fitting_alignment(v, w, indel_penalty=1, mismatch_penalty=1):
     n = len(v)
     m = len(w)
 
-    data = -mismatch_penalty * np.ones((26, 26), int)
-    np.fill_diagonal(data, 1)
-    chars = list(string.ascii_uppercase)
-    score_table = pd.DataFrame(data, index=chars, columns=chars)
-
+    score_table = create_scoring_table(1, mismatch_penalty)
     longest_path = np.zeros((n+1, m+1), dtype=int)
     longest_path[0, :] = np.arange(0, (m+1))*(-1)
 
@@ -143,17 +147,11 @@ def fitting_alignment(v, w, indel_penalty=1, mismatch_penalty=1):
     return final_score, align_v, align_w
 
 
-def overlap_alignment(v, w):
+def overlap_alignment(v, w, mismatch_penalty=1, indel_penalty=1):
     n = len(v)
     m = len(w)
-    indel_penalty = 2
-    mismatch_penalty = 2
 
-    data = -mismatch_penalty * np.ones((26, 26), int)
-    np.fill_diagonal(data, 1)
-    chars = list(string.ascii_uppercase)
-    score_table = pd.DataFrame(data, index=chars, columns=chars)
-
+    score_table = create_scoring_table(1, mismatch_penalty)
     longest_path = np.zeros((n+1, m+1), dtype=int)
     longest_path[0, :] = np.arange(0, (m+1))*(-1)
 
