@@ -1,3 +1,5 @@
+import string
+
 import pandas as pd
 import numpy as np
 
@@ -70,3 +72,13 @@ def global_alignment(v, w, score_table, indel_penalty=5, local_match=False):
     align_v = ''.join(rev_v[::-1])
     align_w = ''.join(rev_w[::-1])
     return final_score, align_v, align_w
+
+
+def edit_distance(v, w):
+    data = -np.ones((26, 26), int)
+    np.fill_diagonal(data, 0)
+    chars = list(string.ascii_uppercase)
+    metrics = pd.DataFrame(data, index=chars, columns=chars)
+
+    n, _, _ = global_alignment(v, w, metrics, 1)
+    return -n
