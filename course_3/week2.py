@@ -82,3 +82,63 @@ def edit_distance(v, w):
 
     n, _, _ = global_alignment(v, w, metrics, 1)
     return -n
+
+
+def fitting_alignment(v, w):
+    n = len(v)
+    m = len(w)
+    indel_penalty = 1
+
+    data = -np.ones((26, 26), int)
+    np.fill_diagonal(data, 1)
+    chars = list(string.ascii_uppercase)
+    score_table = pd.DataFrame(data, index=chars, columns=chars)
+
+    longest_path = np.zeros((n+1, m+1), dtype=int)
+    longest_path[0, :] = np.arange(0, (m+1))*(-1)
+
+    backtrack = np.empty((n+1, m+1), dtype=str)
+    backtrack[0, :] = 'L'
+    backtrack[:, 0] = 'U'
+
+    for i in range(1, n+1):
+        for j in range(1, m+1):
+            down_path = longest_path[i-1, j] - indel_penalty
+            right_path = longest_path[i, j-1] - indel_penalty
+            diag_path = longest_path[i-1, j-1] + score_table.loc[v[i-1], w[j-1]]
+            longest_path[i, j] = max(down_path, right_path, diag_path)
+
+            if longest_path[i, j] == down_path:
+                backtrack[i, j] = 'U'
+            elif longest_path[i, j] == right_path:
+                backtrack[i, j] = 'L'
+            elif longest_path[i, j] == diag_path:
+                backtrack[i, j] = 'D'
+            else:
+                raise ValueError('This should not happen')
+
+    rev_v = []
+    rev_w = []
+    final_score = np.amax(longest_path)
+    i = np.argmax(longest_path[:, m])
+    j = m
+
+    while j != 0:
+        direction = backtrack[i, j]
+        if direction == 'U':
+            rev_v.append(v[i-1])
+            rev_w.append('-')
+            i -= 1
+        elif direction == 'L':
+            rev_v.append('-')
+            rev_w.append(w[j-1])
+            j -= 1
+        elif direction == 'D':
+            rev_v.append(v[i-1])
+            rev_w.append(w[j-1])
+            i -= 1
+            j -= 1
+
+    align_v = ''.join(rev_v[::-1])
+    align_w = ''.join(rev_w[::-1])
+    return final_score, align_v, align_w
