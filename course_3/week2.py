@@ -84,12 +84,11 @@ def edit_distance(v, w):
     return -n
 
 
-def fitting_alignment(v, w):
+def fitting_alignment(v, w, indel_penalty=1, mismatch_penalty=1):
     n = len(v)
     m = len(w)
-    indel_penalty = 1
 
-    data = -np.ones((26, 26), int)
+    data = -mismatch_penalty * np.ones((26, 26), int)
     np.fill_diagonal(data, 1)
     chars = list(string.ascii_uppercase)
     score_table = pd.DataFrame(data, index=chars, columns=chars)
@@ -203,3 +202,16 @@ def overlap_alignment(v, w):
     align_v = ''.join(rev_v[::-1])
     align_w = ''.join(rev_w[::-1])
     return final_score, align_v, align_w
+
+
+def score(v, w, match=1,
+            mismatch_penalty=1, indel_penalty=1):
+    total = 0
+    for x, y in zip(v, w):
+        if x == '-' or y == '-':
+            total -= indel_penalty
+        elif x != y:
+            total -= mismatch_penalty
+        elif x == y:
+            total += match
+    return total
