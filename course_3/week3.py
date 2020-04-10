@@ -47,7 +47,20 @@ def align_with_affine_gap_penalty(v, w, σ, ε, score_table=BLOSUM62):
                     elif middle[i, j] == upper[i, j]:
                         backtrack_m[i, j] = 'U'
                     else:
-                        backtrack_m[i, j] = 'NW'
+                        backtrack_m[i, j] = 'D' # Diagonal
+    '''
+    print('lower')
+    print(backtrack_l)
+    print(lower)
+
+    print('middle')
+    print(backtrack_m)
+    print(middle)
+
+    print('upper')
+    print(backtrack_u)
+    print(upper)
+    '''
 
     final_score = int(middle[n, m])
     curr = backtrack_m
@@ -64,7 +77,7 @@ def align_with_affine_gap_penalty(v, w, σ, ε, score_table=BLOSUM62):
             rev_v.append('-')
             rev_w.append(w[j-1])
             j -= 1
-        elif direction == 'NW':
+        elif direction == 'D':
             rev_v.append(v[i-1])
             rev_w.append(w[j-1])
             i -= 1
