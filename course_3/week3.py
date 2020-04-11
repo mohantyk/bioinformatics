@@ -151,7 +151,7 @@ def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):
     from_source_after_middle = calculate_next_col(from_source, middle+1, v, w, indel_penalty, score_table)
 
     to_sink_before_middle_rev = get_col(v[::-1], w[::-1], m-middle-1, indel_penalty, score_table)
-    to_sink_rev = calculate_next_col(to_sink_before_middle_rev, m-middle, v, w, indel_penalty, score_table)
+    to_sink_rev = calculate_next_col(to_sink_before_middle_rev, m-middle, v[::-1], w[::-1], indel_penalty, score_table)
 
     to_sink = to_sink_rev[::-1]
     middle_col = from_source + to_sink
