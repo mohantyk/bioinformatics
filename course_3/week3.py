@@ -164,6 +164,30 @@ def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):
 
     return (start, end)
 
+def decode_path(v, w, path):
+    v_align = []
+    w_align = []
+    i, j = 0, 0
+    for direction in path:
+        if direction == 'H':
+            w_align.append(w[j])
+            v_align.append('-')
+            j+= 1
+        elif direction == 'V':
+            v_align.append(v[i])
+            w_align.append('-')
+            i+= 1
+        elif direction == 'D':
+            v_align.append(v[i])
+            w_align.append(w[j])
+            i+= 1
+            j+= 1
+        else:
+            raise ValueError('Uknown direction')
+    v_final = ''.join(v_align)
+    w_final = ''.join(w_align)
+    return v_final, w_final
+
 
 def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
     n, m = len(v), len(w)
