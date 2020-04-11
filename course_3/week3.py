@@ -104,6 +104,20 @@ def align_with_affine_gap_penalty(v, w, σ, ε, score_table=BLOSUM62):
     return final_score, align_v, align_w
 
 
+def calculate_next_col(prev_col, j, v, w, indel_penalty, score_table):
+    '''
+    j: index of column to be calculated
+    '''
+    col = np.zeros_like(prev_col, dtype=int)
+    for i in range(len(col)):
+            if i == 0:
+                col[i] = prev_col[i] - indel_penalty
+            else:
+                col[i] = max(col[i-1] - indel_penalty, prev_col[i]-indel_penalty,
+                            prev_col[i-1] + score_table.loc[v[i-1], w[j-1]])
+    return col
+
+
 def get_col(v, w, middle, indel_penalty=5, score_table=BLOSUM62):
     '''
     middle : index of column whose scores are to be returned
@@ -114,13 +128,7 @@ def get_col(v, w, middle, indel_penalty=5, score_table=BLOSUM62):
     while j < middle:
         j += 1
         prev_col = col
-        col = np.zeros(n+1, dtype=int)
-        for i in range(n+1):
-            if i == 0:
-                col[i] = prev_col[i] - indel_penalty
-            else:
-                col[i] = max(col[i-1] - indel_penalty, prev_col[i]-indel_penalty,
-                            prev_col[i-1] + score_table.loc[v[i-1], w[j-1]])
+        col = calculate_next_col(prev_col, j, v, w, indel_penalty, score_table)
     return col
 
 
@@ -134,3 +142,23 @@ def get_middle_node(v, w, indel_penalty=5, score_table=BLOSUM62):
     i_max = np.argmax(middle_col)
     middle_node = (i_max, middle)
     return middle_node
+
+
+def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):
+    m = len(w)
+    middle = m//2
+    from_source = get_col(v, w, middle, indel_penalty, score_table)
+    from_source_after_middle = calculate_next_col(from_source, middle+1, v, w, indel_penalty, score_table)
+
+    to_sink_before_middle_rev = get_col(v[::-1], w[::-1], m-middle-1, indel_penalty, score_table)
+    to_sink_rev = calculate_next_col(to_sink_before_middle_rev, m-middle, v, w, indel_penalty, score_table)
+
+    to_sink = to_sink_rev[::-1]
+    middle_col = from_source + to_sink
+    i_max = np.argmax(middle_col)
+    start = (i_max, middle)
+
+    after_middle_col = from_source_after_middle + to_sink_before_middle_rev[::-1]
+    i_max = np.argmax(after_middle_col)
+    end = (i_max, middle+1)
+    return (start, end)
