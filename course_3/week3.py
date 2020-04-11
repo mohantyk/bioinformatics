@@ -155,12 +155,13 @@ def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):
 
     to_sink = to_sink_rev[::-1]
     middle_col = from_source + to_sink
-    i_max = np.argmax(middle_col)
-    start = (i_max, middle)
+    mid_max = np.argmax(middle_col)
+    start = (mid_max, middle)
 
     after_middle_col = from_source_after_middle + to_sink_before_middle_rev[::-1]
-    i_max = np.argmax(after_middle_col)
-    end = (i_max, middle+1)
+    post_mid_max = np.argmax(after_middle_col)
+    assert post_mid_max == mid_max or post_mid_max == mid_max + 1
+    end = (post_mid_max, middle+1)
 
     return (start, end)
 
