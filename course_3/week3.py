@@ -104,3 +104,35 @@ def align_with_affine_gap_penalty(v, w, σ, ε, score_table=BLOSUM62):
     return final_score, align_v, align_w
 
 
+def find_middle_col(v, w, indel_penalty=5, score_table=BLOSUM62, middle=None):
+    n, m = len(v), len(w)
+    if middle is None:
+        middle = m//2
+        run_again = True
+    else:
+        run_again = False
+
+    j = 0
+    col = np.arange(0, (n+1))*(-indel_penalty)
+    while j < middle:
+        j += 1
+        prev_col = col
+        col = np.zeros(n+1, dtype=int)
+        for i in range(n+1):
+            if i == 0:
+                col[i] = prev_col[i] - indel_penalty
+            else:
+                col[i] = max(col[i-1] - indel_penalty, prev_col[i]-indel_penalty,
+                            prev_col[i-1] + score_table.loc[v[i-1], w[j-1]])
+
+    from_source = col
+    if run_again:
+        to_sink_rev, _ = find_middle_col(v[::-1], w[::-1], middle=m-middle)
+        to_sink = to_sink_rev[::-1]
+    else:
+        to_sink = np.zeros_like(from_source)
+
+    middle_col = from_source + to_sink
+    i_max = np.argmax(middle_col)
+    middle_node = (i_max, j)
+    return middle_col, middle_node
