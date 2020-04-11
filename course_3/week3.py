@@ -159,10 +159,12 @@ def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):
     start = (mid_max, middle)
 
     after_middle_col = from_source_after_middle + to_sink_before_middle_rev[::-1]
-    post_mid_max = np.argmax(after_middle_col)
-    assert post_mid_max == mid_max or post_mid_max == mid_max + 1
-    end = (post_mid_max, middle+1)
-
+    possible_end_nodes = (  (mid_max, middle+1),    # Horizontal
+                            (mid_max+1, middle+1),  # Diagonal
+                            (mid_max+1, middle))    # Vertical
+    values = np.array([after_middle_col[mid_max], after_middle_col[mid_max+1], middle_col[mid_max+1]])
+    end_node_idx = np.argmax(values)
+    end = possible_end_nodes[end_node_idx]
     return (start, end)
 
 def decode_path(v, w, path):
@@ -206,11 +208,14 @@ def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
     i = middle_node[0]
     path = linear_space_align(v[:i], w[:middle], indel_penalty, score_table)
 
-    assert tail_node[1] == middle_node[1] + 1
-    if middle_node[0] == tail_node[0]:
-        edge_direction = 'H'
-    else:
+    if (middle_node[0] == tail_node[0]) and (middle_node[1]==tail_node[1]-1):
+        edge_direction = 'H' # Horizontal
+    elif (middle_node[0] == tail_node[0]-1) and (middle_node[1]==tail_node[1]):
+        edge_direction = 'V' # Vertical
+    elif (middle_node[0] == tail_node[0]-1) and (middle_node[1]==tail_node[1]-1):
         edge_direction = 'D' # Diagonal
+    else:
+        raise ValueError(f'Wrong direction for middle edge {middle_edge}')
     path.append(edge_direction)
 
     lower_i = tail_node[0]
