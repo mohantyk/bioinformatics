@@ -161,4 +161,35 @@ def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):
     after_middle_col = from_source_after_middle + to_sink_before_middle_rev[::-1]
     i_max = np.argmax(after_middle_col)
     end = (i_max, middle+1)
+
     return (start, end)
+
+
+def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
+    n, m = len(v), len(w)
+    if n == 0:
+        path = ['H']*m # Horizontal
+        return path
+    if m == 0:
+        path = ['V']*n # Vertical
+        return path
+    middle = m//2
+    middle_edge = get_middle_edge(v, w, indel_penalty, score_table)
+    middle_node = middle_edge[0]
+    tail_node = middle_edge[1]
+
+    i = middle_node[0]
+    path = linear_space_align(v[:i], w[:middle], indel_penalty, score_table)
+
+    assert tail_node[1] == middle_node[1] + 1
+    if middle_node[0] == tail_node[0]:
+        edge_direction = 'H'
+    else:
+        edge_direction = 'D' # Diagonal
+    path.append(edge_direction)
+
+    lower_i = tail_node[0]
+    tail_path = linear_space_align(v[lower_i:], w[middle:], indel_penalty, score_table)
+    path.extend(tail_path)
+
+    return path
