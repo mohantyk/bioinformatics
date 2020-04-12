@@ -1,4 +1,4 @@
-from week3 import align_with_affine_gap_penalty, get_middle_node, get_middle_edge, linear_space_align, decode_path
+from week3 import *
 
 class TestWeek3:
     def test_affine_gap(self):
@@ -30,3 +30,6 @@ class TestWeek3:
         path = linear_space_align(v, w)
         assert decode_path(v, w, path) == ('PLEASANTLY', '-MEA--N-LY')
 
+    def test_multiple_lcs_score(self):
+        words = ['ATATCCG','TCCGA','ATGTACTG']
+        assert multiple_lcs_score(*words) == 3

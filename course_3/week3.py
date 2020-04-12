@@ -247,8 +247,8 @@ def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
     return path
 
 
-def multiple_lcs(v, w, x):
-    score = np.empty((len(v), len(w), len(x)), dtype=int)
+def multiple_lcs_score(v, w, x):
+    score = np.empty((len(v)+1, len(w)+1, len(x)+1), dtype=int)
     shape = score.shape
     for i in range(shape[0]):
         for j in range(shape[1]):
@@ -275,6 +275,5 @@ def multiple_lcs(v, w, x):
                     else:
                         neighbor_values.append(score[i-1, j-1, k-1])
                 score[i, j, k] = max(neighbor_values)
-                print(i,j,k)
 
     return score[-1, -1, -1]
