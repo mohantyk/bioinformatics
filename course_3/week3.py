@@ -158,6 +158,9 @@ def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):
     mid_max = np.argmax(middle_col)
     start = (mid_max, middle)
 
+    # final_score = middle_col[mid_max]
+    # print(f'final_score : {final_score}')
+
     after_middle_col = from_source_after_middle + to_sink_before_middle_rev[::-1]
     possible_end_nodes = (  (mid_max, middle+1),    # Horizontal
                             (mid_max+1, middle+1),  # Diagonal
@@ -194,10 +197,12 @@ def decode_path(v, w, path):
 
 def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
     n, m = len(v), len(w)
-    if n == 0:
+    if (n, m) == (0, 0):
+        return []
+    elif n == 0 and m > 0:
         path = ['H']*m # Horizontal
         return path
-    if m == 0:
+    elif m == 0 and n > 0:
         path = ['V']*n # Vertical
         return path
     middle = m//2
@@ -219,7 +224,8 @@ def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
     path.append(edge_direction)
 
     lower_i = tail_node[0]
-    tail_path = linear_space_align(v[lower_i:], w[middle:], indel_penalty, score_table)
+    tail_j = tail_node[1]
+    tail_path = linear_space_align(v[lower_i:], w[tail_j:], indel_penalty, score_table)
     path.extend(tail_path)
 
     return path
