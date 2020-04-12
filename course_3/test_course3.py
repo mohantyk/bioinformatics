@@ -1,4 +1,5 @@
 from week3 import *
+from week4 import *
 
 class TestWeek3:
     def test_affine_gap(self):
@@ -39,3 +40,15 @@ class TestWeek3:
         _, aligned = multiple_lcs(*words)
         assert score_alignment(*aligned) == 3
 
+
+class TestWeek4:
+    def test_greedy_sort(self):
+        steps = greedy_sort_permutation([-3, 4, 1, 5, -2])
+        expected = [[-1, -4, 3, 5, -2],
+                    [1, -4, 3, 5, -2],
+                    [1, +2, -5, -3, +4],
+                    [1, 2, 3, 5, 4],
+                    [1, 2, 3, -4, -5],
+                    [1, 2, 3, 4, -5],
+                    [1, 2, 3, 4, 5]]
+        assert steps == expected
