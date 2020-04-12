@@ -163,10 +163,16 @@ def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):
     # print(f'final_score : {final_score}')
 
     after_middle_col = from_source_after_middle + to_sink_before_middle_rev[::-1]
-    possible_end_nodes = (  (mid_max, middle+1),    # Horizontal
-                            (mid_max+1, middle+1),  # Diagonal
-                            (mid_max+1, middle))    # Vertical
-    values = np.array([after_middle_col[mid_max], after_middle_col[mid_max+1], middle_col[mid_max+1]])
+    if mid_max != len(middle_col)-1:
+        possible_end_nodes = (  (mid_max, middle+1),    # Horizontal
+                                (mid_max+1, middle+1),  # Diagonal
+                                (mid_max+1, middle))    # Vertical
+        values = np.array([after_middle_col[mid_max], after_middle_col[mid_max+1], middle_col[mid_max+1]])
+    else:
+        possible_end_nodes = (  (mid_max, middle+1), )   # Horizontal
+
+        values = np.array([after_middle_col[mid_max]])
+
     end_node_idx = np.argmax(values)
     end = possible_end_nodes[end_node_idx]
     return (start, end)
