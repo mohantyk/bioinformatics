@@ -257,23 +257,38 @@ def multiple_lcs_score(v, w, x):
                     score[i, j, k] = 0
                     continue
                 neighbor_values = []
+                neighbors = []
                 if i>0:
-                    neighbor_values.append(score[i-1, j, k])
+                    neighbor = (i-1, j, k)
+                    neighbors.append(neighbor)
+                    neighbor_values.append(score[neighbor])
                 if j>0:
-                    neighbor_values.append(score[i, j-1, k])
+                    neighbor = (i, j-1, k)
+                    neighbors.append(neighbor)
+                    neighbor_values.append(score[neighbor])
                 if k>0:
-                    neighbor_values.append(score[i, j, k-1])
+                    neighbor = (i, j, k-1)
+                    neighbors.append(neighbor)
+                    neighbor_values.append(score[neighbor])
                 if i>0 and j>0:
-                    neighbor_values.append(score[i-1, j-1, k])
+                    neighbor = (i-1, j-1, k)
+                    neighbors.append(neighbor)
+                    neighbor_values.append(score[neighbor])
                 if i>0 and k>0:
-                    neighbor_values.append(score[i-1, j, k-1])
+                    neighbor = (i-1, j, k-1)
+                    neighbors.append(neighbor)
+                    neighbor_values.append(score[neighbor])
                 if j>0 and k>0:
-                    neighbor_values.append(score[i, j-1, k-1])
+                    neighbor = (i, j-1, k-1)
+                    neighbors.append(neighbor)
+                    neighbor_values.append(score[neighbor])
                 if i>0 and j>0 and k>0:
+                    neighbor = (i-1, j-1, k-1)
+                    neighbors.append(neighbor)
                     if len({v[i-1], w[j-1], x[k-1]})==1 :
-                        neighbor_values.append( score[i-1, j-1, k-1] + 1 )
+                        neighbor_values.append( score[neighbor] + 1 )
                     else:
-                        neighbor_values.append(score[i-1, j-1, k-1])
+                        neighbor_values.append(score[neighbor])
                 score[i, j, k] = max(neighbor_values)
 
     return score[-1, -1, -1]
