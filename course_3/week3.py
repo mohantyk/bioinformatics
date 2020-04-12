@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from week2 import BLOSUM62
 
@@ -107,6 +108,7 @@ def align_with_affine_gap_penalty(v, w, σ, ε, score_table=BLOSUM62):
 def calculate_next_col(prev_col, j, v, w, indel_penalty, score_table):
     '''
     j: index of column to be calculated
+    score_table : dict of dicts (pandas dataframe is slow)
     '''
     col = np.zeros_like(prev_col, dtype=int)
     for i in range(len(col)):
@@ -114,14 +116,17 @@ def calculate_next_col(prev_col, j, v, w, indel_penalty, score_table):
                 col[i] = prev_col[i] - indel_penalty
             else:
                 col[i] = max(col[i-1] - indel_penalty, prev_col[i]-indel_penalty,
-                            prev_col[i-1] + score_table.loc[v[i-1], w[j-1]])
+                            prev_col[i-1] + score_table[v[i-1]][w[j-1]])
     return col
 
 
 def get_col(v, w, middle, indel_penalty=5, score_table=BLOSUM62):
     '''
     middle : index of column whose scores are to be returned
+    score_table : dict of dicts
     '''
+    if isinstance(score_table, pd.DataFrame):
+        score_table = score_table.to_dict()
     n = len(v)
     j = 0
     col = np.arange(0, (n+1))*(-indel_penalty)
@@ -203,6 +208,8 @@ def decode_path(v, w, path):
 
 
 def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
+    if isinstance(score_table, pd.DataFrame):
+        score_table = score_table.to_dict()
     n, m = len(v), len(w)
     if (n, m) == (0, 0):
         return []
