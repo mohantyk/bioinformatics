@@ -320,3 +320,13 @@ def multiple_lcs(v, w, x):
 def multiple_lcs_score(v, w, x):
     score, _ = multiple_lcs(v, w, x)
     return score
+
+def score_alignment(v, w, x):
+    score = 0
+    for (a, b, c) in zip(v, w, x):
+        unique = {a,b,c}
+        if len(unique) == 1:
+            if '-' in unique:
+                raise ValueError('All spaces in same location')
+            score += 1
+    return score

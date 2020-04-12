@@ -33,3 +33,9 @@ class TestWeek3:
     def test_multiple_lcs_score(self):
         words = ['ATATCCG','TCCGA','ATGTACTG']
         assert multiple_lcs_score(*words) == 3
+
+    def test_multiple_lcs(self):
+        words = ['ATATCCG','TCCGA','ATGTACTG']
+        _, aligned = multiple_lcs(*words)
+        assert score_alignment(*aligned) == 3
+
