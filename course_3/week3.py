@@ -247,8 +247,9 @@ def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
     return path
 
 
-def multiple_lcs_score(v, w, x):
+def multiple_lcs(v, w, x):
     score = np.empty((len(v)+1, len(w)+1, len(x)+1), dtype=int)
+    backtrack = np.empty_like(score, dtype='3int8')
     shape = score.shape
     for i in range(shape[0]):
         for j in range(shape[1]):
@@ -289,6 +290,33 @@ def multiple_lcs_score(v, w, x):
                         neighbor_values.append( score[neighbor] + 1 )
                     else:
                         neighbor_values.append(score[neighbor])
-                score[i, j, k] = max(neighbor_values)
+                values = np.array(neighbor_values)
+                max_idx = np.argmax(values)
 
-    return score[-1, -1, -1]
+                score[i, j, k] = values[max_idx]
+                backtrack[i, j, k] = neighbors[max_idx]
+
+    idx = (len(v), len(w), len(x))
+    final_score = score[idx]
+
+    rev_v = []
+    rev_w = []
+    rev_x = []
+    while idx != (0,0,0):
+        new_idx = tuple(backtrack[idx])
+        rev_v.append( '-' if new_idx[0] == idx[0] else v[new_idx[0]] )
+        rev_w.append( '-' if new_idx[1] == idx[1] else w[new_idx[1]] )
+        rev_x.append( '-' if new_idx[2] == idx[2] else x[new_idx[2]] )
+        idx = new_idx
+
+    v_align = ''.join(rev_v[::-1])
+    w_align = ''.join(rev_w[::-1])
+    x_align = ''.join(rev_x[::-1])
+    aligned = (v_align, w_align, x_align)
+
+    return final_score, aligned
+
+
+def multiple_lcs_score(v, w, x):
+    score, _ = multiple_lcs(v, w, x)
+    return score
