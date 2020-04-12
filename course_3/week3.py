@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from contextlib import suppress
+
 from week2 import BLOSUM62
 
 def align_with_affine_gap_penalty(v, w, σ, ε, score_table=BLOSUM62):
@@ -243,3 +245,36 @@ def linear_space_align(v, w, indel_penalty=5, score_table=BLOSUM62):
     path.extend(tail_path)
 
     return path
+
+
+def multiple_lcs(v, w, x):
+    score = np.empty((len(v), len(w), len(x)), dtype=int)
+    shape = score.shape
+    for i in range(shape[0]):
+        for j in range(shape[1]):
+            for k in range(shape[2]):
+                if (i, j, k) == (0,0,0):
+                    score[i, j, k] = 0
+                    continue
+                neighbor_values = []
+                if i>0:
+                    neighbor_values.append(score[i-1, j, k])
+                if j>0:
+                    neighbor_values.append(score[i, j-1, k])
+                if k>0:
+                    neighbor_values.append(score[i, j, k-1])
+                if i>0 and j>0:
+                    neighbor_values.append(score[i-1, j-1, k])
+                if i>0 and k>0:
+                    neighbor_values.append(score[i-1, j, k-1])
+                if j>0 and k>0:
+                    neighbor_values.append(score[i, j-1, k-1])
+                if i>0 and j>0 and k>0:
+                    if len({v[i-1], w[j-1], x[k-1]})==1 :
+                        neighbor_values.append( score[i-1, j-1, k-1] + 1 )
+                    else:
+                        neighbor_values.append(score[i-1, j-1, k-1])
+                score[i, j, k] = max(neighbor_values)
+                print(i,j,k)
+
+    return score[-1, -1, -1]
