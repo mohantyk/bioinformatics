@@ -141,7 +141,8 @@ def get_middle_node(v, w, indel_penalty=5, score_table=BLOSUM62):
     middle_col = from_source + to_sink
     i_max = np.argmax(middle_col)
     middle_node = (i_max, middle)
-    return middle_node
+    final_score = middle_col[i_max]
+    return middle_node, final_score
 
 
 def get_middle_edge(v, w, indel_penalty=5, score_table=BLOSUM62):

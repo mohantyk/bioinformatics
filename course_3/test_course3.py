@@ -13,8 +13,9 @@ class TestWeek3:
     def test_middle_node(self):
         v = 'PLEASANTLY'
         w = 'MEASNLY'
-        middle = get_middle_node(v, w, indel_penalty=5)
+        middle, score = get_middle_node(v, w, indel_penalty=5)
         assert middle == (4, 3)
+        assert score == 17
 
     def test_middle_edge(self):
         v = 'PLEASANTLY'
