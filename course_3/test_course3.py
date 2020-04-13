@@ -52,3 +52,7 @@ class TestWeek4:
                     [1, 2, 3, 4, -5],
                     [1, 2, 3, 4, 5]]
         assert steps == expected
+        
+    def test_num_breakpoints(self):
+        perm = [+3, +4, +5, -12, -8, -7, -6, +1, +2, +10, +9, -11, +13, +14]
+        assert num_breakpoints(perm) == 8

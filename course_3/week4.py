@@ -19,3 +19,15 @@ def greedy_sort_permutation(perm):
         last = new
 
     return steps
+
+
+def num_breakpoints(perm):
+    count = 0
+    n = len(perm)
+    extended = [0] + perm + [n+1]
+    for i in range(n+1):
+        k = extended[i]
+        l = extended[i+1]
+        if l-k != 1:
+            count += 1
+    return count
