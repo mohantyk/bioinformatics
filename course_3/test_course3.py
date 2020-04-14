@@ -1,5 +1,6 @@
 from week3 import *
 from week4 import *
+from week5 import *
 
 class TestWeek3:
     def test_affine_gap(self):
@@ -52,7 +53,13 @@ class TestWeek4:
                     [1, 2, 3, 4, -5],
                     [1, 2, 3, 4, 5]]
         assert steps == expected
-        
+
     def test_num_breakpoints(self):
         perm = [+3, +4, +5, -12, -8, -7, -6, +1, +2, +10, +9, -11, +13, +14]
         assert num_breakpoints(perm) == 8
+
+
+class TestWeek5:
+    def test_chromosome_to_cycle(self):
+        perm = [+1, -2, -3, +4]
+        assert chromosome_to_cycle(perm) == [1, 2, 4, 3, 6, 5, 7, 8]
