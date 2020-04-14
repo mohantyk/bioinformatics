@@ -67,3 +67,7 @@ class TestWeek5:
     def test_cycle_to_chromosome(self):
         cycle = [1, 2, 4, 3, 6, 5, 7, 8]
         assert cycle_to_chromosome(cycle) == [+1, -2, -3, +4]
+
+    def test_colored_edges(self):
+        genome = [(+1, -2, -3), (+4, +5, -6)]
+        assert colored_edges(genome) == [(2,4), (3,6), (5,1), (8,9), (10,12), (11,7)]

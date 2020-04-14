@@ -23,3 +23,11 @@ def cycle_to_chromosome(cycle):
         else:
             perm.append(-x//2)
     return perm
+
+def colored_edges(genome):
+    edges = []
+    for chromosome in genome:
+        nodes = chromosome_to_cycle(chromosome)
+        for edge in pairwise(nodes[1:] + [nodes[0]]):
+            edges.append(edge)
+    return edges
