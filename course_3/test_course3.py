@@ -63,3 +63,7 @@ class TestWeek5:
     def test_chromosome_to_cycle(self):
         perm = [+1, -2, -3, +4]
         assert chromosome_to_cycle(perm) == [1, 2, 4, 3, 6, 5, 7, 8]
+
+    def test_cycle_to_chromosome(self):
+        cycle = [1, 2, 4, 3, 6, 5, 7, 8]
+        assert cycle_to_chromosome(cycle) == [+1, -2, -3, +4]
