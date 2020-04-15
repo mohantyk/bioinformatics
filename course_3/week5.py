@@ -53,16 +53,25 @@ def cycles_in_genome_graph(edges):
 
 
 def graph_to_genome(edges):
+    '''
+    input:
+        edges: list of edge tuples
+    output:
+        genome: list of chromosomes
+            each chromosome is a permuation e.g., (+1, -2, -3, +4)
+    '''
     genome = []
     for cycle in cycles_in_genome_graph(edges):
         nodes = deque(node for edge in cycle for node in edge)
         nodes.rotate()
         chromosome = cycle_to_chromosome(nodes)
-        genome.append(chromosome)
+        genome.append(tuple(chromosome))
     return genome
+
 
 def two_break_on_genome_graph(genome_graph, i1, i2, i3, i4):
     '''
+    genome_graph : list of edge tuples
     Convert (i1, i2) -> (i4, i2)
     and     (i3, i4) -> (i3, i1)
     '''
@@ -79,3 +88,9 @@ def two_break_on_genome_graph(genome_graph, i1, i2, i3, i4):
             new_edge = (i1, i3)
         new_graph.append(new_edge)
     return new_graph
+
+def two_break_on_genome(genome, i1, i2, i3, i4):
+    graph = colored_edges(genome)
+    new_graph = two_break_on_genome_graph(graph, i1, i2, i3, i4)
+    new_genome = graph_to_genome(new_graph)
+    return new_genome

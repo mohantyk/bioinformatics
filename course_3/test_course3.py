@@ -78,9 +78,14 @@ class TestWeek5:
 
     def test_graph_to_genome(self):
         colored_edges = [(2,4), (3,6), (5,1), (8,9), (10,12), (11,7)]
-        assert graph_to_genome(colored_edges) == [[+1, -2, -3], [+4, +5, -6]]
+        assert graph_to_genome(colored_edges) == [(+1, -2, -3), (+4, +5, -6)]
 
     def test_two_break_on_genome_graph(self):
         genome = [(2,4), (3,8), (7,5), (6,1)]
         new_genome =[(2,4), (3,1), (7,5), (6,8)]
         assert two_break_on_genome_graph(genome, 1, 6, 3, 8) == new_genome
+
+    def test_two_break_on_genome(self):
+        genome = [(+1, -2, -4, +3)]
+        new_genome = [(1, -2), (-4, 3)]
+        assert two_break_on_genome(genome, 1, 6, 3, 8) == new_genome
