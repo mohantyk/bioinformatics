@@ -1,3 +1,5 @@
+from collections import deque
+
 def chromosome_to_cycle(perm):
     nodes = []
     for n in perm:
@@ -51,4 +53,10 @@ def cycles_in_genome_graph(edges):
 
 
 def graph_to_genome(edges):
-    raise NotImplementedError
+    genome = []
+    for cycle in cycles_in_genome_graph(edges):
+        nodes = deque(node for edge in cycle for node in edge)
+        nodes.rotate()
+        chromosome = cycle_to_chromosome(nodes)
+        genome.append(chromosome)
+    return genome

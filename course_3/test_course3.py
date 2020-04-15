@@ -78,4 +78,4 @@ class TestWeek5:
 
     def test_graph_to_genome(self):
         colored_edges = [(2,4), (3,6), (5,1), (8,9), (10,12), (11,7)]
-        assert graph_to_genome(colored_edges) == [(+1, -2, -3), (+4, +5, -6)]
+        assert graph_to_genome(colored_edges) == [[+1, -2, -3], [+4, +5, -6]]
