@@ -60,3 +60,22 @@ def graph_to_genome(edges):
         chromosome = cycle_to_chromosome(nodes)
         genome.append(chromosome)
     return genome
+
+def two_break_on_genome_graph(genome_graph, i1, i2, i3, i4):
+    '''
+    Convert (i1, i2) -> (i4, i2)
+    and     (i3, i4) -> (i3, i1)
+    '''
+    new_graph = []
+    for edge in genome_graph:
+        new_edge = edge
+        if edge == (i1, i2):
+            new_edge = (i4, i2)
+        elif edge == (i2, i1):
+            new_edge = (i2, i4)
+        elif edge == (i3, i4):
+            new_edge = (i3, i1)
+        elif edge == (i4, i3):
+            new_edge = (i1, i3)
+        new_graph.append(new_edge)
+    return new_graph
