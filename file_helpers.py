@@ -9,9 +9,7 @@ def get_data(filename):
         data = f.readlines()
     return data
 
-def read_adjacency( filename ):
-    with open(filename, 'r') as f:
-        lines = f.readlines()
+def read_adjacency(lines):
     adjacency = {}
     for line in lines:
         line = line.strip()
@@ -20,9 +18,7 @@ def read_adjacency( filename ):
         adjacency[int(head)] = [int(node) for node in tails]
     return adjacency
 
-def read_weighted_adjacency(filename):
-    with open(filename, 'r') as f:
-        graph = f.readlines()
+def read_weighted_adjacency(graph):
     adjacency = defaultdict(list)
     for line in graph.splitlines():
         node, nxt = line.split('->')
