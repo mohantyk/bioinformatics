@@ -48,4 +48,19 @@ def limb_length(num_leafs, node, distances):
                 limb_length = value
     return limb_length
 
+def create_bald_matrix(node, distances):
+    '''
+    inputs:
+        node: index of node whose limb length is to be calculated
+        distances: numpy array with distances between each node pair
+    outputs:
+        numpy 2-D array of distances when node limb is set to zero
+    '''
+    num_leafs = len(distances)
+    limb = limb_length(num_leafs, node, distances)
+    bald = np.array(distances, dtype=float)
+    bald[:, node] -= limb
+    bald[node,:] -= limb
+    bald[node, node] = 0
+    return bald
 

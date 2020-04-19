@@ -24,3 +24,15 @@ class TestWeek1:
                      [21, 12, 0, 13],
                      [22, 13, 13, 0]]
         assert limb_length(n, j, distances) == 2
+
+    def test_bald_matrix(self):
+        j = 3
+        distances = np.array([  [0, 13, 21, 22],
+                                [13, 0, 12, 13],
+                                [21, 12, 0, 13],
+                                [22, 13, 13, 0]] )
+        bald = np.array([[0, 13, 21, 15],
+                         [13, 0, 12, 6],
+                         [21, 12, 0, 6],
+                         [15, 6, 6, 0]])
+        assert_array_equal(create_bald_matrix(j, distances), bald)
