@@ -81,3 +81,12 @@ class TestWeek1:
                         4: [(0, 11), (1, 2), (5, 4)],
                         5: [(4, 4), (3, 7), (2, 6)]  }
         assert additive_phylogeny(n, distances) == adjacency
+
+    def test_path(self):
+        adjacency = {   0: {4: 11},
+                        1: {4: 2},
+                        2: {5: 6},
+                        3: {5: 7},
+                        4: {0: 11, 1: 2, 5: 4},
+                        5: {4: 4, 3: 7, 2: 6} }
+        assert find_path(adjacency, 0, 3) == [0, 4, 5, 3]
