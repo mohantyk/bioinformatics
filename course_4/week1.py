@@ -1,6 +1,5 @@
 import numpy as np
 from math import inf
-from copy import deepcopy
 from itertools import combinations
 
 def calculate_distances(n, adjacency):
@@ -39,9 +38,10 @@ def find_path(adjacency, src, dest):
         return [src, dest]
 
     for nghbr in adjacency[src]:
-        trimmed = deepcopy(adjacency)
-        back_to_src = trimmed[nghbr].pop(src) # Remove edge back to src
-        new_path = find_path(trimmed, nghbr, dest)
+        back_to_src = adjacency[nghbr].pop(src) # Remove edge back to src
+        new_path = find_path(adjacency, nghbr, dest)
+        adjacency[nghbr][src] = back_to_src
+
         if new_path:
             return [src] + new_path
 
