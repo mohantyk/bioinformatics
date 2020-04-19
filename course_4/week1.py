@@ -2,7 +2,7 @@ import numpy as np
 from math import inf
 from itertools import combinations
 
-def distances(n, adjacency):
+def calculate_distances(n, adjacency):
     '''
     inputs:
         n: n is the number of leaf nodes (0...n-1)
@@ -55,6 +55,7 @@ def create_bald_matrix(node, distances):
         node: index of node whose limb length is to be calculated
         distances: numpy array with distances between each node pair
     outputs:
+        limb length
         numpy 2-D array of distances when node limb is set to zero
     '''
     num_leafs = len(distances)
@@ -63,7 +64,7 @@ def create_bald_matrix(node, distances):
     bald[:, node] -= limb
     bald[node,:] -= limb
     bald[node, node] = 0
-    return bald
+    return limb, bald
 
 def find_insertion_end_points(node, distances):
     '''
@@ -84,4 +85,13 @@ def trim_distances(node, distances):
     trimmed = distances[mask,:][:, mask]
     return trimmed
 
-
+def additive_phylogeny(n, distances):
+    '''
+    output:
+        weighted adjacency dict
+    '''
+    if distances.shape == (2, 2):
+        assert distances[0, 1] == distances[1, 0]
+        weight = distances[0, 1]
+        return {0: [(1, weight)],
+                1: [(0, weight)] }
