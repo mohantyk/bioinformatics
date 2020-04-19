@@ -1,5 +1,6 @@
 import numpy as np
 from math import inf
+from itertools import combinations
 
 def distances(n, adjacency):
     '''
@@ -63,4 +64,15 @@ def create_bald_matrix(node, distances):
     bald[node,:] -= limb
     bald[node, node] = 0
     return bald
+
+def find_insertion_end_points(node, distances):
+    '''
+    distances : should be a bald matrix
+    '''
+    valid_nodes = list(range(node)) + list(range(node+1, len(distances)))
+    for (i, k) in combinations(valid_nodes, 2):
+        if distances[i, k] == distances[i, node] + distances[k, node]:
+            return (i, k)
+    raise ValueError('Can not find insertion point')
+
 
