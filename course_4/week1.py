@@ -102,7 +102,14 @@ def trim_distances(node, distances):
     trimmed = distances[mask,:][:, mask]
     return trimmed
 
-def additive_phylogeny(num_leafs, distances):
+def generate_new_node(num_leafs):
+    '''Generator to yield new nodes'''
+    new_node = num_leafs
+    while True:
+        yield new_node
+        new_node += 1
+
+def additive_phylogeny(num_leafs, distances, new_node_generator=None):
     '''
     output:
         weighted adjacency dict
@@ -115,10 +122,45 @@ def additive_phylogeny(num_leafs, distances):
         return {0: {1: weight},
                 1: {0: weight} }
 
+    # Create a generator to yield new nodes when needed
+    if new_node_generator is None:
+        new_node_generator = generate_new_node(num_leafs)
+
     node = num_leafs - 1
     limb, bald = create_bald_matrix(node, distances)
+    # Find insertion point and distance
     (i, k) = find_insertion_end_points(node, bald)
+    distance_from_i = bald[i, node]
+    # Trim the matrix
     trimmed = trim_distances(node, bald)
+    # Create a tree from the trimmed matrix recursively
+    base_tree = additive_phylogeny(num_leafs-1, trimmed, new_node_generator)
+    # Insert node in the tree
+    path = find_path(base_tree, i, k)
+    distance_to_node = 0
+    for idx, curr_node in enumerate(path):
+        if idx == 0: continue # Ignore the src
+        prev_node = path[idx-1]
+        prev_distance = distance_to_node
+        distance_to_node += base_tree[prev_node][curr_node]
+        if distance_to_node == distance_from_i:
+            insertion_node = curr_node # Can insert at existing node
+            break
+        elif distance_to_node > distance_from_i:
+            # Add a new node
+            insertion_node = next(new_node_generator)
+            base_tree[insertion_node] = {}
+            # Break the current edge
+            edge_weight = base_tree[prev_node].pop(curr_node)
+            base_tree[curr_node].pop(prev_node)
+            base_tree[prev_node][insertion_node] = distance_from_i - prev_distance
+            base_tree[insertion_node][prev_node] = base_tree[prev_node][insertion_node]
 
-    base_tree = additive_phylogeny(num_leafs-1, trimmed)
+            base_tree[insertion_node][curr_node] = edge_weight - base_tree[prev_node][insertion_node]
+            base_tree[curr_node][insertion_node] = base_tree[insertion_node][curr_node]
+        else:
+            continue
+    base_tree[insertion_node][node] = limb
+    base_tree[node] = {}
+    base_tree[node][insertion_node] = limb
     return base_tree
