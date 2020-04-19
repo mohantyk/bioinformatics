@@ -2,6 +2,11 @@ import numpy as np
 from math import inf
 from itertools import combinations
 
+import logging
+logging.basicConfig()
+logger = logging.getLogger('week1')
+logger.setLevel(logging.DEBUG)
+
 def calculate_distances(n, adjacency):
     '''
     inputs:
@@ -135,6 +140,7 @@ def additive_phylogeny(num_leafs, distances, new_node_generator=None):
     trimmed = trim_distances(node, bald)
     # Create a tree from the trimmed matrix recursively
     base_tree = additive_phylogeny(num_leafs-1, trimmed, new_node_generator)
+    logger.debug(f'Obtained tree : {base_tree}')
     # Insert node in the tree
     path = find_path(base_tree, i, k)
     distance_to_node = 0
@@ -160,6 +166,7 @@ def additive_phylogeny(num_leafs, distances, new_node_generator=None):
             base_tree[curr_node][insertion_node] = base_tree[insertion_node][curr_node]
         else:
             continue
+    logger.debug(f'Inserting at node {insertion_node} in path from {i} -> {k} at distance {distance_from_i} from {i}')
     base_tree[insertion_node][node] = limb
     base_tree[node] = {}
     base_tree[node][insertion_node] = limb
