@@ -1,4 +1,5 @@
 import numpy as np
+from math import inf
 
 def distances(n, adjacency):
     '''
@@ -26,3 +27,25 @@ def distances(n, adjacency):
         np.fill_diagonal(distances, 0)
 
     return distances
+
+
+def limb_length(num_leafs, node, distances):
+    '''
+    inputs:
+        num_leafs: number of leaf nodes
+        node: index of node whose limb length is to be calculated
+        distances: numpy array with distances between each node pair
+    outputs:
+        limb length of leaf node
+    '''
+    limb_length = inf
+    for i in range(num_leafs):
+        for k in range(num_leafs):
+            if i == node or k == node:
+                continue
+            value = (distances[i][node] + distances[node][k] - distances[i][k])/2
+            if value <= limb_length:
+                limb_length = value
+    return limb_length
+
+

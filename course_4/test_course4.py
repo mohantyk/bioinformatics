@@ -15,3 +15,12 @@ class TestWeek1:
                                         [21, 12, 0, 13],
                                         [22, 13, 13, 0]])
         assert_array_equal(distances(n, adjacency), expected_distances)
+
+    def test_limb_length(self):
+        n = 4
+        j = 1
+        distances = [[0, 13, 21, 22],
+                     [13, 0, 12, 13],
+                     [21, 12, 0, 13],
+                     [22, 13, 13, 0]]
+        assert limb_length(n, j, distances) == 2
