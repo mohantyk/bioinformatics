@@ -75,4 +75,13 @@ def find_insertion_end_points(node, distances):
             return (i, k)
     raise ValueError('Can not find insertion point')
 
+def trim_distances(node, distances):
+    '''
+    Removes the column and row for node
+    '''
+    mask = np.ones(len(distances), dtype=bool)
+    mask[node] = False
+    trimmed = distances[mask,:][:, mask]
+    return trimmed
+
 

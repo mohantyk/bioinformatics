@@ -45,3 +45,15 @@ class TestWeek1:
                          [15, 6, 6, 0]])
         assert find_insertion_end_points(j, bald) == (0, 2)
 
+    def test_trim(self):
+        j = 3
+        bald = np.array([[0, 13, 21, 15],
+                         [13, 0, 12, 6],
+                         [21, 12, 0, 6],
+                         [15, 6, 6, 0]])
+
+        trimmed = np.array([[0, 13, 21],
+                            [13, 0, 12],
+                            [21, 12, 0]])
+
+        assert_array_equal(trim_distances(j, bald), trimmed)
