@@ -85,13 +85,23 @@ def trim_distances(node, distances):
     trimmed = distances[mask,:][:, mask]
     return trimmed
 
-def additive_phylogeny(n, distances):
+def additive_phylogeny(num_leafs, distances):
     '''
     output:
         weighted adjacency dict
     '''
+    assert distances.shape == (num_leafs, num_leafs)
+    # Trivial case
     if distances.shape == (2, 2):
         assert distances[0, 1] == distances[1, 0]
         weight = distances[0, 1]
-        return {0: [(1, weight)],
-                1: [(0, weight)] }
+        return {0: {1: weight},
+                1: {0: weight} }
+
+    node = num_leafs - 1
+    limb, bald = create_bald_matrix(node, distances)
+    (i, k) = find_insertion_end_points(node, bald)
+    trimmed = trim_distances(node, bald)
+
+    base_tree = additive_phylogeny(num_leafs-1, trimmed)
+    return base_tree

@@ -63,8 +63,8 @@ class TestWeek1:
     def test_trivial_additive_phylogeny(self):
         n = 2
         distances = np.array([[0, 42], [42, 0]])
-        adjacency = {0: [(1, 42)],
-                     1: [(0, 42)]}
+        adjacency = {0: {1: 42},
+                     1: {0: 42}}
         assert additive_phylogeny(n, distances) == adjacency
 
     def test_additive_phylogeny(self):
