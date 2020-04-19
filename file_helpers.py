@@ -4,6 +4,12 @@ from collections import defaultdict
 def read_list(list_with_spaces):
     return [int(x) for x in list_with_spaces.split()]
 
+def read_matrix(data):
+    matrix = []
+    for line in data.splitlines():
+        matrix.append(read_list(line))
+    return matrix
+
 def get_data(filename):
     with open(filename) as f:
         data = f.readlines()
