@@ -73,6 +73,13 @@ def adjacency_to_file(adjacency, filename):
         for k, v in adjacency.items():
             f.write(f'{k} -> {", ".join(v)}\n')
 
+def weighted_adjacency_to_file(adjacency, filename):
+    nodes = sorted(adjacency.keys())
+    with open(filename, 'w') as f:
+        for node in nodes:
+            for nghbr, wght in adjacency[node].items():
+                print(f'{node}->{nghbr}:{int(wght)}', file=f)
+
 def path_to_file(path, filename):
     path_str = '->'.join(str(node) for node in path)
     with open(filename, 'w+') as f:
