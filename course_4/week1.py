@@ -11,7 +11,7 @@ def calculate_distances(n, adjacency):
     '''
     inputs:
         n: n is the number of leaf nodes (0...n-1)
-        adjacency : weighted adjacency matrix node: [(nghbr0, weight0), (nghbr1, weight1)]
+        adjacency : weighted adjacency {node: {nghbr0: weight0, nghbr1: weight1}, ... }
     outputs:
         distance matrix
     '''
@@ -19,7 +19,7 @@ def calculate_distances(n, adjacency):
     max_node = max(adjacency.keys())
     distances = np.zeros((max_node+1, max_node+1), int)
     for node in adjacency:
-        for (nghbr, weight) in adjacency[node]:
+        for nghbr, weight in adjacency[node].items():
             distances[node, nghbr] = weight
 
     # Iteratively remove node and update weights to its neighbors
