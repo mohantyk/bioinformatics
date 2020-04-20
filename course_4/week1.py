@@ -5,7 +5,7 @@ from itertools import combinations
 import logging
 logging.basicConfig()
 logger = logging.getLogger('week1')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.ERROR)
 
 def calculate_distances(n, adjacency):
     '''
@@ -164,6 +164,7 @@ def additive_phylogeny(num_leafs, distances, new_node_generator=None):
 
             base_tree[insertion_node][curr_node] = edge_weight - base_tree[prev_node][insertion_node]
             base_tree[curr_node][insertion_node] = base_tree[insertion_node][curr_node]
+            break
         else:
             continue
     logger.debug(f'Inserting at node {insertion_node} in path from {i} -> {k} at distance {distance_from_i} from {i}')
