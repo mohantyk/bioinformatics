@@ -95,6 +95,16 @@ class TestWeek1:
 
 class TestWeek2:
 
+    def test_tree(self):
+        adjacency = {0: {1: 10},
+                     1: {0: 10}}
+        tree = Tree(adjacency)
+        tree.add_edge(0, 2, 20)
+        final_adjacency = { 0: {1: 10, 2: 20},
+                            1: {0: 10},
+                            2: {0: 20}}
+        assert tree.adjacency == final_adjacency
+
     def test_upgma(self):
         n = 4
         distances = np.array([  [0, 20, 17, 11],
