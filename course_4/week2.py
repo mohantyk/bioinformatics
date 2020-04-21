@@ -10,5 +10,10 @@ class Tree:
         self.adjacency[node0][node1] = weight
         self.adjacency[node1][node0] = weight
 
+    def add_node(self, node):
+        if node not in self.adjacency:
+            self.adjacency[node] = {}
+
+
 def upgma(n, distances):
     pass
