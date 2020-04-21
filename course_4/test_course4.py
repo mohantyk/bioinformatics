@@ -1,5 +1,6 @@
 from numpy.testing import assert_array_equal
 from week1 import *
+from week2 import *
 
 class TestWeek1:
     def test_distances(self):
@@ -90,3 +91,21 @@ class TestWeek1:
                         4: {0: 11, 1: 2, 5: 4},
                         5: {4: 4, 3: 7, 2: 6} }
         assert find_path(adjacency, 0, 3) == [0, 4, 5, 3]
+
+
+class TestWeek2:
+
+    def test_upgma(self):
+        n = 4
+        distances = np.array([  [0, 20, 17, 11],
+                        [20, 0, 20, 13],
+                        [17, 20, 0, 10],
+                        [11, 13, 10, 0]])
+        adjacency = {0: {5: 7.0},
+                     1: {6: 8.833},
+                     2: {4: 5.0},
+                     3: {4: 5.0},
+                     4: {2: 5.0, 3: 5.0, 5: 2.0},
+                     5: {0: 7.0, 4: 2.0, 6: 1.833},
+                     6: {5: 1.833, 1: 8.833}}
+        assert upgma(n, distances) == adjacency
