@@ -132,3 +132,20 @@ class TestWeek2:
                      5: {0: 7.0, 4: 2.0, 6: approx(1.833, abs=1e-3)},
                      6: {5: approx(1.833, abs=1e-3), 1: approx(8.833, abs=1e-3)}}
         assert upgma(n, distances) == adjacency
+
+    def test_upgma_example(self):
+        n = 4
+        distances = np.array([
+            [0,3,4,3],
+            [3,0,4,5],
+            [4,4,0,2],
+            [3,5,2,0]
+        ])
+        adjacency = {0: {5: 1.5},
+                     1: {5: 1.5},
+                     2: {4: 1.0},
+                     3: {4: 1.0},
+                     5: {0: 1.5, 1: 1.5, 6: 0.5},
+                     4: {2: 1.0, 3: 1.0, 6: 1.0},
+                     6: {4: 1.0, 5: 0.5}}
+        assert upgma(n, distances) == adjacency
