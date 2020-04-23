@@ -1,4 +1,5 @@
 from numpy.testing import assert_array_equal
+from pytest import approx
 from week1 import *
 from week2 import *
 
@@ -124,10 +125,10 @@ class TestWeek2:
                         [17, 20, 0, 10],
                         [11, 13, 10, 0]])
         adjacency = {0: {5: 7.0},
-                     1: {6: 8.833},
+                     1: {6: approx(8.833, abs=1e-3)},
                      2: {4: 5.0},
                      3: {4: 5.0},
                      4: {2: 5.0, 3: 5.0, 5: 2.0},
-                     5: {0: 7.0, 4: 2.0, 6: 1.833},
-                     6: {5: 1.833, 1: 8.833}}
+                     5: {0: 7.0, 4: 2.0, 6: approx(1.833, abs=1e-3)},
+                     6: {5: approx(1.833, abs=1e-3), 1: approx(8.833, abs=1e-3)}}
         assert upgma(n, distances) == adjacency
