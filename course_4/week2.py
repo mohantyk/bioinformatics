@@ -1,6 +1,11 @@
 from itertools import product
 from math import inf
 
+import logging
+logging.basicConfig()
+logger = logging.getLogger('upgma')
+logger.setLevel(logging.DEBUG)
+
 class Tree:
     def __init__(self, adjacency=None):
         '''
@@ -71,11 +76,12 @@ def upgma(n, distances):
         # Add a new node for the new cluster
         new_node = tree.add_node(next_node_idx); next_node_idx += 1
         cluster_to_node[new_cluster] = new_node
-        # Connect new node to the cluster nodes
+        age[new_node] = min_distance/2
+        # Connect new node to the child nodes
         child0 = cluster_to_node[cluster0]
         child1 = cluster_to_node[cluster1]
-        tree.add_edge(new_node, child0, min_distance/2)
-        tree.add_edge(new_node, child1, min_distance/2)
+        tree.add_edge(new_node, child0, age[new_node] - age[child0])
+        tree.add_edge(new_node, child1, age[new_node] - age[child1])
 
     return tree.adjacency
 
