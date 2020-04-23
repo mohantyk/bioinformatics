@@ -1,3 +1,5 @@
+from itertools import product
+
 class Tree:
     def __init__(self, adjacency=None):
         self.adjacency = adjacency if adjacency is not None else {}
@@ -15,5 +17,30 @@ class Tree:
             self.adjacency[node] = {}
 
 
+def cluster_distance(cluster0, cluster1, distances):
+    '''
+    cluster0/cluster1 : sets
+    distances : distance matrix
+    '''
+    size0 = len(cluster0)
+    size1 = len(cluster1)
+    total = 0
+    for (i, j) in product(cluster0, cluster1):
+        total += distances[i, j]
+    final_distance = total/(size0*size1)
+    return final_distance
+
+
+
 def upgma(n, distances):
-    pass
+    clusters = set()
+    age = {}
+    tree = Tree()
+    for leaf in range(n):
+        tree.add_node(leaf)
+        clusters.add(frozenset({leaf}))
+        age[leaf] = 0
+
+    while len(clusters) > 1:
+        break
+

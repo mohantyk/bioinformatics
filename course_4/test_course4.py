@@ -105,6 +105,18 @@ class TestWeek2:
                             2: {0: 20}}
         assert tree.adjacency == final_adjacency
 
+    def test_cluster_distance(self):
+        cluster0 = {0,1}
+        cluster1 = {2,3}
+        distances = np.array([
+            [0,3,4,3],
+            [3,0,4,5],
+            [4,4,0,2],
+            [3,5,2,0]
+        ])
+        assert cluster_distance(cluster0, cluster1, distances) == 4
+
+
     def test_upgma(self):
         n = 4
         distances = np.array([  [0, 20, 17, 11],
