@@ -1,3 +1,4 @@
+import numpy as np
 from numpy.testing import assert_array_equal
 from pytest import approx
 from week1 import *
@@ -159,7 +160,8 @@ class TestWeek2:
                             [-68,   0, -60, -60],
                             [-60, -60,   0, -68],
                             [-60, -60, -68,   0]])
-        assert create_d_star(distances) == d_star
+
+        assert_array_equal(create_d_star(distances), d_star)
 
 
     def test_neighbor_joining(self):

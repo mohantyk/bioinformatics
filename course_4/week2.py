@@ -1,6 +1,8 @@
 from itertools import product
 from math import inf
 
+import numpy as np
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger('upgma')
@@ -85,5 +87,17 @@ def upgma(n, distances):
 
     return tree.adjacency
 
+def create_d_star(distances):
+    total_distance = distances.sum(axis=1)
+    d_star = np.zeros_like(distances)
+    shape = distances.shape
+    n = shape[0]
+    for i in range(shape[0]):
+        for j in range(shape[1]):
+            if i==j: continue
+            d_star[i, j] = (n-2)*distances[i, j] - total_distance[i] - total_distance[j]
+    return d_star
 
 
+def neigbhor_joining(n, distances):
+    pass
