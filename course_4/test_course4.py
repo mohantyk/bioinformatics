@@ -150,6 +150,17 @@ class TestWeek2:
                      6: {4: 1.0, 5: 0.5}}
         assert upgma(n, distances) == adjacency
 
+    def test_d_star(self):
+        distances = np.array( [ [0, 13, 21, 22],
+                        [13, 0, 12, 13],
+                        [21, 12, 0, 13],
+                        [22, 13, 13, 0]])
+        d_star = np.array([[  0, -68, -60, -60],
+                            [-68,   0, -60, -60],
+                            [-60, -60,   0, -68],
+                            [-60, -60, -68,   0]])
+        assert create_d_star(distances) == d_star
+
 
     def test_neighbor_joining(self):
         n = 4
@@ -163,4 +174,4 @@ class TestWeek2:
                      3: {4: 12.0},
                      4: {0: 8.0, 3: 12.0, 5: 2.0},
                      5: {1: 13.5, 2: 16.5, 4: 2.0}}
-        assert neighbor_joining(n, distances) == adjacency
+        assert neigbhor_joining(n, distances) == adjacency
