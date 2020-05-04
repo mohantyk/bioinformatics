@@ -149,3 +149,18 @@ class TestWeek2:
                      4: {2: 1.0, 3: 1.0, 6: 1.0},
                      6: {4: 1.0, 5: 0.5}}
         assert upgma(n, distances) == adjacency
+
+
+    def test_neighbor_joining(self):
+        n = 4
+        distances = np.array([  [0, 23, 27, 20],
+                                [23, 0, 30, 28],
+                                [27, 30, 0, 30],
+                                [20, 28, 30, 0]])
+        adjacency = {0: {4: 8.0},
+                     1: {5: 13.50},
+                     2: {5: 16.50},
+                     3: {4: 12.0},
+                     4: {0: 8.0, 3: 12.0, 5: 2.0},
+                     5: {1: 13.5, 2: 16.5, 4: 2.0}}
+        assert neighbor_joining(n, distances) == adjacency
