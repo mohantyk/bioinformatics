@@ -2,6 +2,7 @@ from itertools import product
 from math import inf
 
 import numpy as np
+import pandas as pd
 
 import logging
 logging.basicConfig()
@@ -99,5 +100,16 @@ def create_d_star(distances):
     return d_star
 
 
-def neigbhor_joining(n, distances):
-    pass
+def neighbor_joining(distances):
+    n = len(distances)
+    if not isinstance(distances, pd.DataFrame):
+        df = pd.DataFrame(data=distances, index=list(range(n)), columns=list(range(n)))
+    else:
+        df = distances
+
+    if n == 2:
+        leaf0, leaf1 = df.columns
+        edge = df.to_numpy()[0,1]
+        adjacency = {leaf0: {leaf1: edge}, leaf1: {leaf0: edge}}
+        return Tree(adjacency)
+

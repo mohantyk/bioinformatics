@@ -163,9 +163,13 @@ class TestWeek2:
 
         assert_array_equal(create_d_star(distances), d_star)
 
+    def test_neighbor_simple(self):
+        distances = np.array([[0, 4], [4, 0]])
+        tree = neighbor_joining(distances)
+        assert tree.adjacency == {0: {1: 4}, 1: {0: 4}}
+
 
     def test_neighbor_joining(self):
-        n = 4
         distances = np.array([  [0, 23, 27, 20],
                                 [23, 0, 30, 28],
                                 [27, 30, 0, 30],
@@ -176,4 +180,4 @@ class TestWeek2:
                      3: {4: 12.0},
                      4: {0: 8.0, 3: 12.0, 5: 2.0},
                      5: {1: 13.5, 2: 16.5, 4: 2.0}}
-        assert neigbhor_joining(n, distances) == adjacency
+        assert neighbor_joining(distances) == adjacency
