@@ -180,4 +180,5 @@ class TestWeek2:
                      3: {4: 12.0},
                      4: {0: 8.0, 3: 12.0, 5: 2.0},
                      5: {1: 13.5, 2: 16.5, 4: 2.0}}
-        assert neighbor_joining(distances) == adjacency
+        tree = neighbor_joining(distances)
+        assert tree.adjacency == adjacency

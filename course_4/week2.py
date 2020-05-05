@@ -1,4 +1,4 @@
-from itertools import product
+from itertools import product, count
 from math import inf
 
 import numpy as np
@@ -90,7 +90,7 @@ def upgma(n, distances):
 
 def create_d_star(distances):
     total_distance = distances.sum(axis=1)
-    d_star = np.zeros_like(distances)
+    d_star = np.zeros_like(distances, dtype=float)
     shape = distances.shape
     n = shape[0]
     for i in range(shape[0]):
@@ -100,8 +100,11 @@ def create_d_star(distances):
     return d_star
 
 
-def neighbor_joining(distances):
+def neighbor_joining(distances, node_counter=None):
     n = len(distances)
+    if node_counter is None:
+        node_counter = count(n)
+
     if not isinstance(distances, pd.DataFrame):
         df = pd.DataFrame(data=distances, index=list(range(n)), columns=list(range(n)))
     else:
@@ -112,4 +115,28 @@ def neighbor_joining(distances):
         edge = df.to_numpy()[0,1]
         adjacency = {leaf0: {leaf1: edge}, leaf1: {leaf0: edge}}
         return Tree(adjacency)
+
+    d_star = create_d_star(df.to_numpy())
+    np.fill_diagonal(d_star, np.inf)
+    (idx0, idx1) = np.unravel_index(np.argmin(d_star), d_star.shape)
+
+    i = df.columns[idx0]
+    j = df.columns[idx1]
+    total_distance = df.sum(axis=1)
+    delta = (total_distance[i] - total_distance[j]) / (n-2)
+
+    limb_i = 0.5*(df.loc[i, j] + delta)
+    limb_j = 0.5*(df.loc[i,j] - delta)
+    new_node = next(node_counter)
+
+    distance_from_new_node = [0.5*(df.loc[i, node] + df.loc[j, node] - df.loc[i, j])
+                              for node in df.columns]
+    df[new_node] = distance_from_new_node # Add new column
+    df.loc[new_node] = distance_from_new_node + [0] # Add new row
+    df.drop(index=[i,j], columns=[i,j]) # Drop old rows and columns
+
+    tree = neighbor_joining(df, node_counter)
+    tree.add_edge(new_node, i, limb_i)
+    tree.add_edge(new_node, j, limb_j)
+    return tree
 
