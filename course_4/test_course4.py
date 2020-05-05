@@ -3,6 +3,7 @@ from numpy.testing import assert_array_equal
 from pytest import approx
 from week1 import *
 from week2 import *
+from week3 import *
 
 class TestWeek1:
     def test_distances(self):
@@ -186,10 +187,10 @@ class TestWeek2:
 
 class Test_Week3:
 
-    def test_create_tree(self):
+    def test_create_binary_tree(self):
         values = [0, 1, 2, 3, 4, 5, 6]
-        root = create_tree(values)
-        assert root.right.left == 5
+        root = create_binary_tree(values)
+        assert root.right.left.val == 5
 
     def test_small_parsimony_score(self):
         assert False

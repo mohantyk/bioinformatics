@@ -1,4 +1,9 @@
+from collections import deque
 from math import inf
+
+import sys
+sys.path.append('..')
+from course_3.week5 import pairwise
 
 alphabet = ['A', 'C', 'G', 'T']
 class Node:
@@ -10,6 +15,26 @@ class Node:
     def is_leaf(self):
         return (not self.left) and (not self.right)
 
+
+def create_binary_tree(values):
+    root = Node(values[0])
+    nodes = deque([root])
+    level = 1
+    while True:
+        indices = slice(2**level-1, 2**(level+1)-1)
+        if indices.stop > len(values):
+            break
+
+        for lval, rval in pairwise(values[indices]):
+            node = nodes.popleft()
+            node.left = Node(lval)
+            nodes.append(node.left)
+
+            node.right = Node(rval)
+            nodes.append(node.right)
+        level += 1
+
+    return root
 
 
 def small_parsimony_score(node, idx):
