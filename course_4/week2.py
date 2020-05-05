@@ -6,8 +6,8 @@ import pandas as pd
 
 import logging
 logging.basicConfig()
-logger = logging.getLogger('upgma')
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger('neighbor')
+logger.setLevel(logging.ERROR)
 
 class Tree:
     def __init__(self, adjacency=None):
@@ -133,7 +133,7 @@ def neighbor_joining(distances, node_counter=None):
                               for node in df.columns]
     df[new_node] = distance_from_new_node # Add new column
     df.loc[new_node] = distance_from_new_node + [0] # Add new row
-    df.drop(index=[i,j], columns=[i,j]) # Drop old rows and columns
+    df = df.drop(index=[i,j], columns=[i,j]) # Drop old rows and columns
 
     tree = neighbor_joining(df, node_counter)
     tree.add_edge(new_node, i, limb_i)
