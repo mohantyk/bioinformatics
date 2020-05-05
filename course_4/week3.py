@@ -7,6 +7,7 @@ from course_3.week5 import pairwise
 
 alphabet = ['A', 'C', 'G', 'T']
 class Node:
+    ''' Node in a directed binary tree '''
     def __init__(self, val, left=None, right=None):
         self.val = val
         self.left = left
@@ -17,6 +18,11 @@ class Node:
 
 
 def create_binary_tree(values):
+    '''
+    Creates a binary tree
+    input:
+        values : array of values
+    '''
     root = Node(values[0])
     nodes = deque([root])
     level = 1
@@ -38,6 +44,9 @@ def create_binary_tree(values):
 
 
 def small_parsimony_score(node, idx):
+    '''
+    Returns a dictionary of letter : score for each letter in alphabet
+    '''
     score = {letter:inf for letter in alphabet}
     if node.is_leaf():
         ch = node.val[idx]
@@ -49,6 +58,17 @@ def small_parsimony_score(node, idx):
     for k in alphabet:
         score[k] = min(lscore[i] + int(k!=i) for i in lscore) + min(rscore[j] + int(k!=j) for j in rscore)
     return score
+
+def small_parsimony(root):
+    '''
+    Returns the final small parsimony score for the tree
+    '''
+    head = root
+    while not head.is_leaf():
+        head = head.left
+    n = len(head.val)
+    total_score = sum(min(small_parsimony_score(root, idx).values()) for idx in range(n))
+    return total_score
 
 
 
