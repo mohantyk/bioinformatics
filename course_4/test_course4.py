@@ -182,3 +182,14 @@ class TestWeek2:
                      5: {1: 13.5, 2: 16.5, 4: 2.0}}
         tree = neighbor_joining(distances)
         assert tree.adjacency == adjacency
+
+
+class Test_Week3:
+
+    def test_create_tree(self):
+        values = [0, 1, 2, 3, 4, 5, 6]
+        root = create_tree(values)
+        assert root.right.left == 5
+
+    def test_small_parsimony_score(self):
+        assert False
