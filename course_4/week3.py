@@ -47,7 +47,7 @@ def small_parsimony_score(node, idx):
     lscore = small_parsimony_score(node.left, idx)
     rscore = small_parsimony_score(node.right, idx)
     for k in alphabet:
-        score[k] = min(lscore[i] + k!=i for i in lscore) + min(rscore[j] + k!=j for j in lscore)
+        score[k] = min(lscore[i] + int(k!=i) for i in lscore) + min(rscore[j] + int(k!=j) for j in rscore)
     return score
 
 

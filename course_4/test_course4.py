@@ -193,4 +193,7 @@ class Test_Week3:
         assert root.right.left.val == 5
 
     def test_small_parsimony_score(self):
-        assert False
+        values = ['', '', '', '', '', '', '', 'C', 'C', 'A', 'C', 'G', 'G', 'T', 'C']
+        root = create_binary_tree(values)
+        score = small_parsimony_score(root, 0)
+        assert score == {'A': 5, 'C': 3, 'G': 4, 'T': 4}
