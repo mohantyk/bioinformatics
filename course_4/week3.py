@@ -1,9 +1,12 @@
 from collections import deque
 from math import inf
 
+from week2 import Tree
+
 import sys
 sys.path.append('..')
 from course_3.week5 import pairwise
+from course_1.week2 import hamming
 
 alphabet = ['A', 'C', 'G', 'T']
 class Node:
@@ -64,6 +67,16 @@ def create_binary_tree(values):
         level += 1
 
     return root
+
+def create_adjacency_matrix(root, graph=None):
+    if graph is None:
+        graph = Tree()
+    if not root.is_leaf():
+        graph.add_edge(root.val, root.left.val, hamming(root.val, root.left.val))
+        graph.add_edge(root.val, root.right.val, hamming(root.val, root.right.val))
+        create_adjacency_matrix(root.left, graph)
+        create_adjacency_matrix(root.right, graph)
+    return graph.adjacency
 
 
 def parsimony_backtrack(score, k):
