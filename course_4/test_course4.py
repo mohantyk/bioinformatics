@@ -202,3 +202,4 @@ class Test_Week3:
         values = ['', '', '', 'CAAATCCC', 'ATTGCGAC', 'CTGCGCTG', 'ATGGACGA']
         root = create_binary_tree(values)
         assert small_parsimony(root) == 16
+        assert root.val == 'ATAGACAA'

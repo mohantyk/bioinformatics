@@ -16,6 +16,29 @@ class Node:
     def is_leaf(self):
         return (not self.left) and (not self.right)
 
+    def add_char(self, ch):
+        '''
+        Adds a character to the name (val) of the node
+        '''
+        if not self.is_leaf():
+            self.val = self.val + ch
+
+    def store_backtrack_data(self, data):
+        '''
+        data : dict of {char: (lchar, rchar)}
+        '''
+        self.backtrack_data = data
+
+    def backtrack(self, ch):
+        '''
+        Adds character to name, and then backtracks to child nodes
+        '''
+        self.add_char(ch)
+        if not self.is_leaf():
+            lchar, rchar = self.backtrack_data[ch]
+            self.left.backtrack(lchar)
+            self.right.backtrack(rchar)
+
 
 def create_binary_tree(values):
     '''
@@ -80,6 +103,7 @@ def small_parsimony_score(node, idx):
         score[k] = min(lscore[i] + int(k!=i) for i in lscore) + min(rscore[j] + int(k!=j) for j in rscore)
         assert score[k] == lmin + rmin # Same thing calculated in two different ways
         backtrack[k] = (lchar, rchar)
+        node.store_backtrack_data(backtrack)
 
     return score
 
@@ -91,10 +115,11 @@ def small_parsimony(root):
     while not head.is_leaf():
         head = head.left
     n = len(head.val)
-    total_score = sum(min(small_parsimony_score(root, idx).values()) for idx in range(n))
+
+    total_score = 0
+    for idx in range(n): # idx-th tree
+        score = small_parsimony_score(root, idx)
+        ch = min(score, key=score.get)
+        total_score += score[ch]
+        root.backtrack(ch)
     return total_score
-
-
-
-
-
