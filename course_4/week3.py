@@ -116,7 +116,7 @@ def small_parsimony_score(node, idx):
         score[k] = min(lscore[i] + int(k!=i) for i in lscore) + min(rscore[j] + int(k!=j) for j in rscore)
         assert score[k] == lmin + rmin # Same thing calculated in two different ways
         backtrack[k] = (lchar, rchar)
-        node.store_backtrack_data(backtrack)
+    node.store_backtrack_data(backtrack)
 
     return score
 
