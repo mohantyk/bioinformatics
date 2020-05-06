@@ -43,6 +43,24 @@ def create_binary_tree(values):
     return root
 
 
+def parsimony_backtrack(score, k):
+    '''
+    inputs:
+        score: dictionary
+        k : letter in alphabet
+    output:
+        curr_min : min score
+        min_char : key in score that minimizes the score
+    '''
+    curr_min = inf
+    for i in score:
+        curr = score[i] + int(k!=i)
+        if curr < curr_min:
+            curr_min = curr
+            min_char = i
+    return curr_min, min_char
+
+
 def small_parsimony_score(node, idx):
     '''
     Returns a dictionary of letter : score for each letter in alphabet
@@ -55,8 +73,14 @@ def small_parsimony_score(node, idx):
 
     lscore = small_parsimony_score(node.left, idx)
     rscore = small_parsimony_score(node.right, idx)
+    backtrack = {}
     for k in alphabet:
+        lmin, lchar = parsimony_backtrack(lscore, k)
+        rmin, rchar = parsimony_backtrack(rscore, k)
         score[k] = min(lscore[i] + int(k!=i) for i in lscore) + min(rscore[j] + int(k!=j) for j in rscore)
+        assert score[k] == lmin + rmin # Same thing calculated in two different ways
+        backtrack[k] = (lchar, rchar)
+
     return score
 
 def small_parsimony(root):
@@ -69,6 +93,7 @@ def small_parsimony(root):
     n = len(head.val)
     total_score = sum(min(small_parsimony_score(root, idx).values()) for idx in range(n))
     return total_score
+
 
 
 
