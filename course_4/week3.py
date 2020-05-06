@@ -42,6 +42,12 @@ class Node:
             self.left.backtrack(lchar)
             self.right.backtrack(rchar)
 
+    def __str__(self):
+        return f'Node({self.val})'
+
+    def __repr__(self):
+        return f'Node({self.val})'
+
 
 def create_binary_tree(values):
     '''
