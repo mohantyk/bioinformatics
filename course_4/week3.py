@@ -7,6 +7,7 @@ import sys
 sys.path.append('..')
 from course_3.week5 import pairwise
 from course_1.week2 import hamming
+from file_helpers import get_data
 
 alphabet = ['A', 'C', 'G', 'T']
 class Node:
@@ -159,3 +160,32 @@ def small_parsimony(root):
         total_score += score[ch]
         root.backtrack(ch)
     return total_score
+
+
+# -------------------------------------------------
+# File helpers
+def read_graph_from_file(filename):
+    data = get_data(filename)
+
+    nodes = {}
+    for line in data[1:]:
+        try:
+            top, bottom = line.strip().split('->')
+        except ValueError:
+            break
+        top = int(top)
+
+        try:
+            bottom = int(bottom)
+            bottom_node = nodes[bottom]
+        except ValueError:
+            bottom_node = Node(bottom)
+
+        if top not in nodes:
+            top_node = Node()
+            nodes[top] = top_node
+            top_node.left = bottom_node
+        else:
+            nodes[top].right = bottom_node
+    root = nodes[top]
+    return root
