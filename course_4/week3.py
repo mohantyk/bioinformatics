@@ -1,5 +1,5 @@
 from collections import deque
-from math import inf
+from math import inf, log2
 
 from week2 import Tree
 
@@ -56,17 +56,25 @@ def create_binary_tree(values):
         indices = slice(2**level-1, 2**(level+1)-1)
         if indices.stop > len(values):
             break
-
         for lval, rval in pairwise(values[indices]):
             node = nodes.popleft()
+            # left
             node.left = Node(lval)
             nodes.append(node.left)
-
+            # right
             node.right = Node(rval)
             nodes.append(node.right)
         level += 1
-
     return root
+
+def create_tree_from_leaves(leafs):
+    '''Num of leafs should be a power of 2'''
+    n = len(leafs)
+    level = int(log2(n))
+    assert level == log2(n)
+    num_spaces = sum(2**i for i in range(level))
+    spaces = ['']*num_spaces
+    return create_binary_tree(spaces + leafs)
 
 def create_adjacency_matrix(root, graph=None):
     if graph is None:
