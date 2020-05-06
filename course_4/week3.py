@@ -78,6 +78,15 @@ def create_adjacency_matrix(root, graph=None):
         create_adjacency_matrix(root.right, graph)
     return graph.adjacency
 
+def total_path_sum(root):
+    if root.is_leaf():
+        return 0
+    ledge = hamming(root.val, root.left.val)
+    redge = hamming(root.val, root.right.val)
+    return ledge + total_path_sum(root.left) + redge + total_path_sum(root.right)
+
+# ---------------------------------------
+# Algorithms
 
 def parsimony_backtrack(score, k):
     '''
