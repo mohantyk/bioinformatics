@@ -11,7 +11,7 @@ from course_1.week2 import hamming
 alphabet = ['A', 'C', 'G', 'T']
 class Node:
     ''' Node in a directed binary tree '''
-    def __init__(self, val, left=None, right=None):
+    def __init__(self, val='', left=None, right=None):
         self.val = val
         self.left = left
         self.right = right
