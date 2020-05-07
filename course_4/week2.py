@@ -24,6 +24,10 @@ class Tree:
         self.adjacency[node0][node1] = weight
         self.adjacency[node1][node0] = weight
 
+    def del_edge(self, node0, node1):
+        del self.adjacency[node0][node1]
+        del self.adjacency[node1][node0]
+
     def add_node(self, node):
         if node not in self.adjacency:
             self.adjacency[node] = {}
