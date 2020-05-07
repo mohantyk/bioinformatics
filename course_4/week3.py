@@ -1,5 +1,6 @@
 from collections import deque
 from math import inf, log2
+from copy import copy
 
 from week2 import Tree
 
@@ -160,6 +161,27 @@ def small_parsimony(root):
         total_score += score[ch]
         root.backtrack(ch)
     return total_score
+
+
+def nearest_tree_neighbor(graph, a, b):
+    a_nghbrs = graph.adjacency[a].keys() - {b}
+    b_nghbrs = graph.adjacency[b].keys() - {a}
+    w, x = a_nghbrs
+    y, z = b_nghbrs
+
+    tree0 = copy(graph)
+    tree0.del_edge(a, x)
+    tree0.del_edge(b, y)
+    tree0.add_edge(a, y)
+    tree0.add_edge(b, x)
+
+    tree1 = copy(graph)
+    tree1.del_edge(a, x)
+    tree1.del_edge(b, z)
+    tree1.add_edge(a, z)
+    tree1.add_edge(b, x)
+
+    return [tree0, tree1]
 
 
 # -------------------------------------------------

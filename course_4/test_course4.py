@@ -226,5 +226,5 @@ class Test_Week3:
         nghbr1.add_edge(2, 5)
         nghbr1.add_edge(4, 5)
 
-        nghbrs = nearest_tree_neighbor(graph)
-        assert set(nghbrs) == {nghbr0, nghbr1}
+        nghbrs = nearest_tree_neighbor(graph, 5, 4)
+        assert nghbrs == [nghbr0, nghbr1]
