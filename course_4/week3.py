@@ -189,3 +189,68 @@ def read_graph_from_file(filename):
             nodes[top].right = bottom_node
     root = nodes[top]
     return root
+
+
+def solve_unrooted_small_parsimony(filename):
+
+    def create_rooted_tree(name, parent, tree, nodes):
+        root = nodes[name]
+        children = tree.adjacency[name].keys() - {parent}
+        if len(children) == 0:
+            return
+        assert len(children) == 2
+
+        left = children.pop()
+        lnode = nodes[left]
+        root.left = lnode
+        create_rooted_tree(left, name, tree, nodes)
+
+        right = children.pop()
+        rnode = nodes[right]
+        root.right = rnode
+        create_rooted_tree(right, name, tree, nodes)
+
+        return root
+
+
+    data = get_data(filename)
+    tree = Tree()
+    leafs = set()
+    nodes = {}
+    # Create an undirected graph
+    for line in data[1:]:
+        left, right = line.strip().split('->')
+        try:
+            int(left)
+            nodes[left] = Node()
+        except ValueError:
+            leafs.add(left)
+            nodes[left] = Node(left)
+        tree.add_edge(left, right, 1)
+
+    internal = tree.adjacency.keys() - leafs
+    node0 = internal.pop()
+    node1 = list(tree.adjacency[node0].keys())[0]
+
+    # Add a root and created a rooted tree
+    root = Node()
+    root.left = nodes[node0]
+    root.right = nodes[node1]
+    tree.del_edge(node0, node1)
+    create_rooted_tree(node0, 'root', tree, nodes)
+    create_rooted_tree(node1, 'root', tree, nodes)
+    # Solve rooted parsimony problem
+    score = small_parsimony(root)
+    # Remove the root
+    root.val = 'x'*len(root.left.val)
+    graph = create_adjacency(root)
+
+    root_name = root.val
+    lname = nodes[node0].val
+    rname = nodes[node1].val
+    graph.del_edge(root_name, lname)
+    graph.del_edge(root_name, rname)
+    graph.add_edge(lname, rname, hamming(lname, rname))
+    del graph.adjacency[root_name]
+
+    return score, graph
