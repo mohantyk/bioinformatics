@@ -1,5 +1,6 @@
 from itertools import product, count
 from math import inf
+from copy import deepcopy
 
 import numpy as np
 import pandas as pd
@@ -34,6 +35,12 @@ class Tree:
         else:
             raise ValueError(f'Node {node} already exists')
         return node
+
+    def __eq__(self, other):
+        return self.adjacency == other.adjacency
+
+    def __copy__(self):
+        return Tree(deepcopy(self.adjacency))
 
 
 def cluster_distance(cluster0, cluster1, distances):
