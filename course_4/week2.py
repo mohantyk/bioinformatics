@@ -16,7 +16,7 @@ class Tree:
         '''
         self.adjacency = adjacency if adjacency is not None else {}
 
-    def add_edge(self, node0, node1, weight):
+    def add_edge(self, node0, node1, weight=0):
         if node0 not in self.adjacency:
             self.adjacency[node0] = {}
         if node1 not in self.adjacency:

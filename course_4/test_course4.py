@@ -203,3 +203,28 @@ class Test_Week3:
         root = create_binary_tree(values)
         assert small_parsimony(root) == 16
         assert root.val == 'ATAGACAA'
+
+    def test_nearest_neighbor(self):
+        graph = Tree()
+        graph.add_edge(0, 4)
+        graph.add_edge(1, 4)
+        graph.add_edge(2, 5)
+        graph.add_edge(3, 5)
+        graph.add_edge(4, 5)
+
+        nghbr0 = Tree()
+        nghbr0.add_edge(1, 4)
+        nghbr0.add_edge(0, 5)
+        nghbr0.add_edge(3, 4)
+        nghbr0.add_edge(2, 5)
+        nghbr0.add_edge(4, 5)
+
+        nghbr1 = Tree()
+        nghbr1.add_edge(1, 5)
+        nghbr1.add_edge(0, 4)
+        nghbr1.add_edge(3, 4)
+        nghbr1.add_edge(2, 5)
+        nghbr1.add_edge(4, 5)
+
+        nghbrs = nearest_tree_neighbor(graph)
+        assert set(nghbrs) == {nghbr0, nghbr1}
