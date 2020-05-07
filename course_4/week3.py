@@ -83,15 +83,15 @@ def create_tree_from_leaves(leafs):
     spaces = ['']*num_spaces
     return create_binary_tree(spaces + leafs)
 
-def create_adjacency_matrix(root, graph=None):
+def create_adjacency(root, graph=None):
     if graph is None:
         graph = Tree()
     if not root.is_leaf():
         graph.add_edge(root.val, root.left.val, hamming(root.val, root.left.val))
         graph.add_edge(root.val, root.right.val, hamming(root.val, root.right.val))
-        create_adjacency_matrix(root.left, graph)
-        create_adjacency_matrix(root.right, graph)
-    return graph.adjacency
+        create_adjacency(root.left, graph)
+        create_adjacency(root.right, graph)
+    return graph
 
 def total_path_sum(root):
     if root.is_leaf():
