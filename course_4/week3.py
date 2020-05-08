@@ -283,7 +283,6 @@ def read_graph_from_file(filename):
     return root
 
 
-
 def solve_unrooted_small_parsimony(data):
     tree = Tree()
     # Create an undirected graph
@@ -292,3 +291,31 @@ def solve_unrooted_small_parsimony(data):
         tree.add_edge(left, right)
 
     return unrooted_small_parsimony(tree)
+
+
+def large_parsimony_interchange_heuristic(data):
+    '''
+    input:
+        data from a large parsimony problem file
+    output:
+        List of (score, graph) tuples
+    '''
+    score = inf
+    results = []
+    new_score, new_graph = solve_unrooted_small_parsimony(data[1:])
+    while new_score < score:
+        score = new_score
+        graph = copy(new_graph)
+
+        for edge in graph.internal_edges:
+            v0, v1 = edge
+            graph_nghbrs = nearest_tree_neighbor(graph, v0, v1)
+            for nghbr in graph_nghbrs:
+                nghbr_score, etched_graph = unrooted_small_parsimony(nghbr)
+                if nghbr_score < new_score:
+                    new_score = nghbr_score
+                    new_graph = etched_graph
+
+        if new_score < score:
+            results.append((new_score, new_graph))
+    return results
