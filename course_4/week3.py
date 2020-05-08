@@ -213,9 +213,18 @@ def read_graph_from_file(filename):
     return root
 
 
-def solve_unrooted_small_parsimony(filename):
+def solve_unrooted_small_parsimony(data):
 
     def create_rooted_tree(name, parent, tree, nodes):
+        ''' Creates a rooted tree from unrooted graph
+        inputs:
+            name: name of current node
+            parent: parent of current node
+            tree: unrooted graph
+            nodes: {name: Node} dict
+        outputs:
+            root node
+        '''
         root = nodes[name]
         children = tree.adjacency[name].keys() - {parent}
         if len(children) == 0:
@@ -235,12 +244,11 @@ def solve_unrooted_small_parsimony(filename):
         return root
 
 
-    data = get_data(filename)
     tree = Tree()
     leafs = set()
     nodes = {}
     # Create an undirected graph
-    for line in data[1:]:
+    for line in data:
         left, right = line.strip().split('->')
         try:
             int(left)
