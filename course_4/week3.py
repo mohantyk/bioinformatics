@@ -111,12 +111,8 @@ def add_root(graph):
         internal edge where root was inserted, as (left_vertex, right_vertex)
     '''
     adjacency = graph.adjacency
-    internal_nodes = {node for node in adjacency
-                         if len(adjacency[node])!=1}
-    internal_edges = {frozenset((node, neighbor))
-                         for node in adjacency
-                         for neighbor in adjacency[node]
-                         if {node, neighbor}.issubset(internal_nodes)}
+    internal_edges = graph.internal_edges
+
     root = Node()
     nodes = {} # graph vertex to tree node mapping
 
