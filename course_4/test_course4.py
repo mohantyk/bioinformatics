@@ -228,3 +228,22 @@ class Test_Week3:
 
         nghbrs = nearest_tree_neighbor(graph, 5, 4)
         assert nghbrs == [nghbr0, nghbr1]
+
+
+    def test_unrooted_small_parsimony(self):
+        data = '''GCAGGGTA->5
+                TTTACGCG->5
+                CGACCTGA->6
+                GATTCCAC->6
+                5->TTTACGCG
+                5->GCAGGGTA
+                5->7
+                TCCGTAGT->7
+                7->5
+                7->6
+                7->TCCGTAGT
+                6->GATTCCAC
+                6->CGACCTGA
+                6->7'''
+        score, _ = solve_unrooted_small_parsimony(data.splitlines())
+        assert score == 23
