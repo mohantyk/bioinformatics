@@ -209,6 +209,34 @@ def small_parsimony(root):
     return total_score
 
 
+def unrooted_small_parsimony(tree):
+    '''
+    inputs:
+        tree: unrooted tree
+    outputs:
+        score: parsimony score
+        graph: final graph
+    '''
+    # Add a root and created a rooted tree
+    root, _ = add_root(tree)
+    # Solve rooted parsimony problem
+    score = small_parsimony(root)
+    # Remove the root
+    root.val = 'x'*len(root.left.val)
+    graph = create_adjacency(root)
+    root_name = root.val
+    lname = root.left.val
+    rname = root.right.val
+
+    graph.del_edge(root_name, lname)
+    graph.del_edge(root_name, rname)
+    graph.add_edge(lname, rname, hamming(lname, rname))
+    del graph.adjacency[root_name]
+
+    return score, graph
+
+
+
 def nearest_tree_neighbor(graph, a, b):
     a_nghbrs = graph.adjacency[a].keys() - {b}
     b_nghbrs = graph.adjacency[b].keys() - {a}
@@ -267,20 +295,4 @@ def solve_unrooted_small_parsimony(data):
         left, right = line.strip().split('->')
         tree.add_edge(left, right)
 
-    # Add a root and created a rooted tree
-    root, _ = add_root(tree)
-    # Solve rooted parsimony problem
-    score = small_parsimony(root)
-    # Remove the root
-    root.val = 'x'*len(root.left.val)
-    graph = create_adjacency(root)
-    root_name = root.val
-    lname = root.left.val
-    rname = root.right.val
-
-    graph.del_edge(root_name, lname)
-    graph.del_edge(root_name, rname)
-    graph.add_edge(lname, rname, hamming(lname, rname))
-    del graph.adjacency[root_name]
-
-    return score, graph
+    return unrooted_small_parsimony(tree)
