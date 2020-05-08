@@ -106,6 +106,9 @@ def add_root(graph):
     '''
     Creates a rooted tree from an unrooted graph
     All nodes except leaf nodes have empty string value
+    output:
+        root node
+        internal edge where root was inserted, as (left_vertex, right_vertex)
     '''
     adjacency = graph.adjacency
     internal_nodes = {node for node in adjacency
@@ -118,6 +121,7 @@ def add_root(graph):
     nodes = {} # graph vertex to tree node mapping
 
     lname, rname = internal_edges.pop()
+    broken_edge = (lname, rname)
     lnode = Node(); nodes[lname] = lnode; root.left = nodes[lname]
     rnode = Node(); nodes[rname] = rnode; root.right = nodes[rname]
 
@@ -141,7 +145,7 @@ def add_root(graph):
         else:
             raise ValueError(f'Should either be internal node or leaf node. Plz check {vertex}')
 
-    return root
+    return root, broken_edge
 
 # ---------------------------------------
 # Algorithms
@@ -257,70 +261,23 @@ def read_graph_from_file(filename):
 
 
 def solve_unrooted_small_parsimony(data):
-
-    def create_rooted_tree(name, parent, tree, nodes):
-        ''' Creates a rooted tree from unrooted graph
-        inputs:
-            name: name of current node
-            parent: parent of current node
-            tree: unrooted graph
-            nodes: {name: Node} dict
-        outputs:
-            root node
-        '''
-        root = nodes[name]
-        children = tree.adjacency[name].keys() - {parent}
-        if len(children) == 0:
-            return
-        assert len(children) == 2
-
-        left = children.pop()
-        lnode = nodes[left]
-        root.left = lnode
-        create_rooted_tree(left, name, tree, nodes)
-
-        right = children.pop()
-        rnode = nodes[right]
-        root.right = rnode
-        create_rooted_tree(right, name, tree, nodes)
-
-        return root
-
-
     tree = Tree()
-    leafs = set()
-    nodes = {}
     # Create an undirected graph
     for line in data:
         left, right = line.strip().split('->')
-        try:
-            int(left)
-            nodes[left] = Node()
-        except ValueError:
-            leafs.add(left)
-            nodes[left] = Node(left)
-        tree.add_edge(left, right, 1)
-
-    internal = tree.adjacency.keys() - leafs
-    node0 = internal.pop()
-    node1 = list(tree.adjacency[node0].keys())[0]
+        tree.add_edge(left, right)
 
     # Add a root and created a rooted tree
-    root = Node()
-    root.left = nodes[node0]
-    root.right = nodes[node1]
-    tree.del_edge(node0, node1)
-    create_rooted_tree(node0, 'root', tree, nodes)
-    create_rooted_tree(node1, 'root', tree, nodes)
+    root, _ = add_root(tree)
     # Solve rooted parsimony problem
     score = small_parsimony(root)
     # Remove the root
     root.val = 'x'*len(root.left.val)
     graph = create_adjacency(root)
-
     root_name = root.val
-    lname = nodes[node0].val
-    rname = nodes[node1].val
+    lname = root.left.val
+    rname = root.right.val
+
     graph.del_edge(root_name, lname)
     graph.del_edge(root_name, rname)
     graph.add_edge(lname, rname, hamming(lname, rname))
