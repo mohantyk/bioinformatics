@@ -101,6 +101,48 @@ def total_path_sum(root):
     redge = hamming(root.val, root.right.val)
     return ledge + total_path_sum(root.left) + redge + total_path_sum(root.right)
 
+
+def add_root(graph):
+    '''
+    Creates a rooted tree from an unrooted graph
+    All nodes except leaf nodes have empty string value
+    '''
+    adjacency = graph.adjacency
+    internal_nodes = {node for node in adjacency
+                         if len(adjacency[node])!=1}
+    internal_edges = {frozenset((node, neighbor))
+                         for node in adjacency
+                         for neighbor in adjacency[node]
+                         if {node, neighbor}.issubset(internal_nodes)}
+    root = Node()
+    nodes = {} # graph vertex to tree node mapping
+
+    lname, rname = internal_edges.pop()
+    lnode = Node(); nodes[lname] = lnode; root.left = nodes[lname]
+    rnode = Node(); nodes[rname] = rnode; root.right = nodes[rname]
+
+    to_process = deque([lname, rname]) # Vertices yet to be processed
+    processed = {lname, rname} # Hack to simulate breaking of the internal edge, without modifying the graph
+    while to_process:
+        vertex = to_process.pop()
+        children = adjacency[vertex].keys() - processed
+        processed.add(vertex)
+        if len(children) == 2:
+            parent = nodes[vertex]
+            lname, rname = children
+            to_process.append(lname)
+            to_process.append(rname)
+            lnode = Node(); nodes[lname] = lnode; parent.left = nodes[lname]
+            rnode = Node(); nodes[rname] = rnode; parent.right = nodes[rname]
+
+        elif len(children) == 0: # leaf node, set value
+            node = nodes[vertex]
+            node.val = vertex
+        else:
+            raise ValueError(f'Should either be internal node or leaf node. Plz check {vertex}')
+
+    return root
+
 # ---------------------------------------
 # Algorithms
 
@@ -211,6 +253,7 @@ def read_graph_from_file(filename):
             nodes[top].right = bottom_node
     root = nodes[top]
     return root
+
 
 
 def solve_unrooted_small_parsimony(data):
