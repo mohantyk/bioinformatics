@@ -36,6 +36,26 @@ class Tree:
             raise ValueError(f'Node {node} already exists')
         return node
 
+    @property
+    def internal_nodes(self):
+        internal = {node for node in self.adjacency
+                         if len(self.adjacency[node])!=1}
+        return internal
+
+    @property
+    def internal_edges(self):
+        '''
+        Returns all internal nodes in graph as a set.
+        Each edge is represented by a frozenset((v1, v2))
+        '''
+        internal_nodes = self.internal_nodes
+        edges = set()
+        for node in self.adjacency:
+            for nghbr in self.adjacency[node]:
+                if {node, nghbr}.issubset(internal_nodes):
+                    edges.add(frozenset((node,nghbr)))
+        return edges
+
     def __eq__(self, other):
         return self.adjacency == other.adjacency
 
