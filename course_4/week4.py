@@ -15,6 +15,12 @@ class DirectedGraph(Tree):
     def del_edge(self, node0, node1):
         del self.adjacency[node0][node1]
 
+    def add_weight(self, node, weight):
+        try:
+            self.weights[node] = weight
+        except AttributeError:
+            self.weights = {}
+            self.weights[node] = weight
 
 def graph_from_spectrum(spectrum):
     graph = DirectedGraph()
