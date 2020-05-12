@@ -42,6 +42,18 @@ def ideal_spectrum(peptide):
     return sorted(masses)
 
 
+def find_all_paths(source, sink, graph):
+    if source == sink:
+        return [[sink]]
+    paths = []
+    adjacency = graph.adjacency
+    for nghbr in adjacency[source]:
+        paths_from_nghbr = find_all_paths(nghbr, sink, graph)
+        for path in paths_from_nghbr:
+            paths.append([source] + path)
+    return paths
+
+
 def decode_ideal_spectrum(spectrum):
     pass
 

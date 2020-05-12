@@ -291,6 +291,21 @@ class TestWeek4:
     def test_ideal_spectrum(self):
         assert ideal_spectrum('GPG') == [0, 57, 57, 154, 154, 211]
 
+    def test_find_all_paths(self):
+        graph = DirectedGraph({   0: {57: 'G', 71: 'A'},
+                            57: {154: 'P', 185: 'Q'},
+                            71: {185: 'N'},
+                            154: {301: 'F'},
+                            185: {332: 'F'},
+                            301: {415: 'N', 429: 'Q'},
+                            332: {429: 'P'},
+                            415: {486: 'A'},
+                            429: {486: 'G'} })
+        assert find_all_paths(301, 486, graph) == [[301, 415, 486], [301, 429, 486]]
+
+
     def test_decode_ideal_spectrum(self):
         spectrum = [57, 71, 154, 185, 301, 332, 415, 429, 486]
         assert decode_ideal_spectrum(spectrum) == 'GPFNA'
+
+
