@@ -131,7 +131,7 @@ def peptide_sequencing(spectral_vec, mass_to_amino=MASS_2_AMINO):
         node_weight = graph.weights[node]
         for nghbr in incoming.get(node, {}):
             new_path = best_score[node] + node_weight
-            current_best = best_score.get(node, -inf)
+            current_best = best_score.get(nghbr, -inf)
             if new_path > current_best:
                 best_score[nghbr] = new_path
                 to_process.append(nghbr)
