@@ -22,6 +22,15 @@ class DirectedGraph(Tree):
             self.weights = {}
             self.weights[node] = weight
 
+    def incoming_edges(self):
+        incoming = {}
+        for node in self.adjacency:
+            for nghbr, wght in self.adjacency[node].items():
+                if nghbr not in incoming:
+                    incoming[nghbr] = {}
+                incoming[nghbr][node] = wght
+        return incoming
+
 def graph_from_spectrum(spectrum):
     graph = DirectedGraph()
     if spectrum[0] != 0:
@@ -93,4 +102,20 @@ def vec_to_peptide(vector):
     return ''.join(MASS_2_AMINO[mass] for mass in masses)
 
 def peptide_sequencing(spectral_vec, mass_to_amino=MASS_2_AMINO):
-    pass
+    def score(path, graph):
+        total = sum(graph.weights[node] for node in path)
+        return total
+
+    graph = DirectedGraph()
+    graph.add_node(0)
+    graph.add_weight(0, 0)
+    for i, s_i in enumerate(spectral_vec):
+        graph.add_node(i)
+        graph.add_weight(i, s_i)
+        for mass in mass_to_amino:
+            j = i - mass
+            if j >= 0:
+                graph.add_edge(j, i, mass_to_amino[mass])
+
+
+
