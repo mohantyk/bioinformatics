@@ -76,3 +76,12 @@ def peptide_vector(peptide):
         amino_vec[-1] = 1
         vector.extend(amino_vec)
     return vector
+
+def vec_to_peptide(vector):
+    start = -1
+    masses = []
+    for idx, val in enumerate(vector):
+        if val == 1:
+            masses.append(idx-start)
+            start = idx
+    return ''.join(MASS_2_AMINO[mass] for mass in masses)
