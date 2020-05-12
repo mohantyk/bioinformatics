@@ -4,6 +4,7 @@ from week2 import Tree
 import sys
 sys.path.append('..')
 from course_2.week3 import AMINO_MASS, MASS_2_AMINO
+from course_3.week5 import pairwise
 
 class DirectedGraph(Tree):
     def add_edge(self, node0, node1, weight=0):
@@ -55,5 +56,13 @@ def find_all_paths(source, sink, graph):
 
 
 def decode_ideal_spectrum(spectrum):
-    pass
-
+    graph = graph_from_spectrum(spectrum)
+    paths = find_all_paths(0, max(spectrum), graph)
+    for path in paths:
+        peptide_elems = []
+        for idx, src in enumerate(path[:-1]):
+            nghbr = path[idx+1]
+            peptide_elems.append(graph.adjacency[src][nghbr])
+        peptide = ''.join(peptide_elems)
+        if ideal_spectrum(peptide)[1:] == spectrum: # Don't include 0 mass
+            return peptide
