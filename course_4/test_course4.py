@@ -287,3 +287,6 @@ class TestWeek4:
                             429: {486: 'G'}
                         }
         assert graph.adjacency == expected
+
+    def test_ideal_spectrum(self):
+        assert ideal_spectrum('GPG') == [0, 57, 57, 154, 154, 211]

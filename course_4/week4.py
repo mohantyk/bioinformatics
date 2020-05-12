@@ -26,3 +26,19 @@ def graph_from_spectrum(spectrum):
                 graph.add_edge(mass, next_mass, MASS_2_AMINO[diff])
     return graph
 
+
+def calculate_mass(peptide):
+    return sum(AMINO_MASS[amino] for amino in peptide)
+
+def ideal_spectrum(peptide):
+    n = len(peptide)
+    masses = []
+    for idx in range(n):
+        prefix = peptide[0:idx]
+        masses.append(calculate_mass(prefix))
+    for idx in range(n):
+        suffix = peptide[idx:]
+        masses.append(calculate_mass(suffix))
+    return sorted(masses)
+
+
