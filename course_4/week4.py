@@ -119,17 +119,17 @@ def peptide_sequencing(spectral_vec, mass_to_amino=MASS_2_AMINO):
             j = i - mass
             if j >= 0:
                 graph.add_edge(j, i, mass_to_amino[mass])
-    m = i
+    m = i # Terminal node in DAG
 
-    # Dynamic programming
-    incoming = graph.incoming_edges()
-    best_score = {m: 0}
-    best_path = {m: [m]}
-    to_process = deque([m])
+    # Dynamic programming to get best path (i.e., with maximum total weight of nodes in path)
+    incoming = graph.incoming_edges() # dictionary with incomding edges for each node
+    best_score = {m: 0} # best score for each node (Does not include the node itself)
+    best_path = {m: [m]} # best path from each node (includes the node itself)
+    to_process = deque([m]) # Nodes still to be processed
     while to_process:
         node = to_process.popleft()
         node_weight = graph.weights[node]
-        for nghbr in incoming.get(node, {}):
+        for nghbr in incoming.get(node, {}): # incoming neighbors
             new_path = best_score[node] + node_weight
             current_best = best_score.get(nghbr, -inf)
             if new_path > current_best:
@@ -137,7 +137,7 @@ def peptide_sequencing(spectral_vec, mass_to_amino=MASS_2_AMINO):
                 to_process.append(nghbr)
                 best_path[nghbr] = [nghbr] + best_path[node]
 
-    final_path = best_path[0]
+    final_path = best_path[0] # Best path from src i.g., node 0
     peptide = []
     for idx, node in enumerate(final_path[:-1]):
         nxt = final_path[idx+1]
