@@ -1,4 +1,5 @@
 from collections import Counter
+from pathlib import Path
 
 import sys
 sys.path.append('..')
@@ -6,7 +7,8 @@ sys.path.append('..')
 from course_1.week2 import reverse_complement
 
 def get_rna_table():
-    rna_amino_file = 'RNA_codon_table_1.txt'
+    curr_dir = Path(__file__).resolve().parent
+    rna_amino_file = curr_dir / 'RNA_codon_table_1.txt'
     codon_to_amino = {}
     with open(rna_amino_file, 'r') as f:
         for line in f:
@@ -19,7 +21,8 @@ def get_rna_table():
     return codon_to_amino
 
 def get_amino_mass():
-    mass_table_file = 'integer_mass_table.txt'
+    curr_dir = Path(__file__).resolve().parent
+    mass_table_file = curr_dir/'integer_mass_table.txt'
     mass_table = {}
     with open(mass_table_file, 'r') as f:
         for line in f:
