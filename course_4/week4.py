@@ -85,3 +85,6 @@ def vec_to_peptide(vector):
             masses.append(idx-start)
             start = idx
     return ''.join(MASS_2_AMINO[mass] for mass in masses)
+
+def peptide_sequencing(spectral_vec, mass_to_amino=MASS_2_AMINO):
+    pass
