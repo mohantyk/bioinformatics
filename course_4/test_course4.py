@@ -5,6 +5,7 @@ import pytest
 from week1 import *
 from week2 import *
 from week3 import *
+from week4 import *
 
 class TestWeek1:
     def test_distances(self):
@@ -269,3 +270,20 @@ class TestWeek3:
         results = large_parsimony_interchange_heuristic(data.splitlines())
         scores = [step[0] for step in results]
         assert scores == [22, 21]
+
+
+class TestWeek4:
+    def test_spectrum_graph(self):
+        spectrum = [57, 71, 154, 185, 301, 332, 415, 429, 486]
+        graph = graph_from_spectrum(spectrum)
+        expected = {   0: {57: 'G', 71: 'A'},
+                            57: {154: 'P', 185: 'Q'},
+                            71: {185: 'N'},
+                            154: {301: 'F'},
+                            185: {332: 'F'},
+                            301: {415: 'N', 429: 'Q'},
+                            332: {429: 'P'},
+                            415: {486: 'A'},
+                            429: {486: 'G'}
+                        }
+        assert graph.adjacency == expected
