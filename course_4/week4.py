@@ -42,3 +42,6 @@ def ideal_spectrum(peptide):
     return sorted(masses)
 
 
+def decode_ideal_spectrum(spectrum):
+    pass
+

@@ -290,3 +290,7 @@ class TestWeek4:
 
     def test_ideal_spectrum(self):
         assert ideal_spectrum('GPG') == [0, 57, 57, 154, 154, 211]
+
+    def test_decode_ideal_spectrum(self):
+        spectrum = [57, 71, 154, 185, 301, 332, 415, 429, 486]
+        assert decode_ideal_spectrum(spectrum) == 'GPFNA'
