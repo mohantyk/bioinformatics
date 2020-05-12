@@ -66,3 +66,13 @@ def decode_ideal_spectrum(spectrum):
         peptide = ''.join(peptide_elems)
         if ideal_spectrum(peptide)[1:] == spectrum: # Don't include 0 mass
             return peptide
+
+
+def peptide_vector(peptide):
+    vector = []
+    for amino in peptide:
+        mass = AMINO_MASS[amino]
+        amino_vec = [0]*mass
+        amino_vec[-1] = 1
+        vector.extend(amino_vec)
+    return vector
