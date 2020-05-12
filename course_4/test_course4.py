@@ -310,6 +310,6 @@ class TestWeek4:
 
     def test_peptide_sequencing(self):
         spectral_vector = [0,0,0,4,-2,-3,-1,-7,6,5,3,2,1,9,3,-8,0,3,1,2,1,8]
-        example_amino = {'X': 4, 'Z': 5}
+        example_amino = {4: 'X', 5: 'Z'}
         assert peptide_sequencing(spectral_vector, example_amino) == 'XZZXX'
 

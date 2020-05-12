@@ -1,3 +1,5 @@
+from collections import deque
+from math import inf
 
 from week2 import Tree
 
@@ -7,10 +9,10 @@ from course_2.week3 import AMINO_MASS, MASS_2_AMINO
 from course_3.week5 import pairwise
 
 class DirectedGraph(Tree):
-    def add_edge(self, node0, node1, weight=0):
+    def add_edge(self, node0, node1, edge_weight=0):
         if node0 not in self.adjacency:
             self.adjacency[node0] = {}
-        self.adjacency[node0][node1] = weight
+        self.adjacency[node0][node1] = edge_weight
 
     def del_edge(self, node0, node1):
         del self.adjacency[node0][node1]
@@ -25,10 +27,10 @@ class DirectedGraph(Tree):
     def incoming_edges(self):
         incoming = {}
         for node in self.adjacency:
-            for nghbr, wght in self.adjacency[node].items():
+            for nghbr, edge in self.adjacency[node].items():
                 if nghbr not in incoming:
                     incoming[nghbr] = {}
-                incoming[nghbr][node] = wght
+                incoming[nghbr][node] = edge
         return incoming
 
 def graph_from_spectrum(spectrum):
@@ -109,13 +111,35 @@ def peptide_sequencing(spectral_vec, mass_to_amino=MASS_2_AMINO):
     graph = DirectedGraph()
     graph.add_node(0)
     graph.add_weight(0, 0)
-    for i, s_i in enumerate(spectral_vec):
+    for idx, s_i in enumerate(spectral_vec):
+        i = idx+1
         graph.add_node(i)
         graph.add_weight(i, s_i)
         for mass in mass_to_amino:
             j = i - mass
             if j >= 0:
                 graph.add_edge(j, i, mass_to_amino[mass])
+    m = i
 
+    # Dynamic programming
+    incoming = graph.incoming_edges()
+    best_score = {m: 0}
+    best_path = {m: [m]}
+    to_process = deque([m])
+    while to_process:
+        node = to_process.popleft()
+        node_weight = graph.weights[node]
+        for nghbr in incoming.get(node, {}):
+            new_path = best_score[node] + node_weight
+            current_best = best_score.get(node, -inf)
+            if new_path > current_best:
+                best_score[nghbr] = new_path
+                to_process.append(nghbr)
+                best_path[nghbr] = [nghbr] + best_path[node]
 
-
+    final_path = best_path[0]
+    peptide = []
+    for idx, node in enumerate(final_path[:-1]):
+        nxt = final_path[idx+1]
+        peptide.append(graph.adjacency[node][nxt])
+    return ''.join(peptide)
