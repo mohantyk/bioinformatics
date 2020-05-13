@@ -70,7 +70,7 @@ def psm_search(spectral_vectors, proteome, threshold, amino_mass=AMINO_MASS):
 def size_of_spectral_dictionary(spectral_vector, threshold, max_score, amino_mass=AMINO_MASS):
     cache = {}
     def size(i, t, vec):
-        if i < 0:
+        if i < 0 or t < 0:
             result = 0
         elif i == 0:
             if t==0:
