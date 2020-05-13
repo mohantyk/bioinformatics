@@ -6,7 +6,7 @@ from week2 import Tree
 import sys
 sys.path.append('..')
 from course_2.week3 import AMINO_MASS, MASS_2_AMINO
-from course_3.week5 import pairwise
+
 
 class DirectedGraph(Tree):
     def add_edge(self, node0, node1, edge_weight=0):
@@ -104,10 +104,6 @@ def vec_to_peptide(vector):
     return ''.join(MASS_2_AMINO[mass] for mass in masses)
 
 def peptide_sequencing(spectral_vec, mass_to_amino=MASS_2_AMINO):
-    def score(path, graph):
-        total = sum(graph.weights[node] for node in path)
-        return total
-
     graph = DirectedGraph()
     graph.add_node(0)
     graph.add_weight(0, 0)
