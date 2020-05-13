@@ -330,3 +330,9 @@ class TestWeek5:
         example_amino = {'X': 4, 'Z': 5}
         peptide = psm_search(vectors, proteome, threshold, example_amino)
         assert peptide == {'XZXZ'}
+
+    def test_size_of_spectral_dictionary(self):
+        spectral_vector = [4, -3, -2, 3, 3, -4, 5, -3, -1, -1, 3, 4, 1, 3]
+        threshold = 1
+        max_score = 8
+        assert size_of_spectral_dictionary(spectral_vector, threshold, max_score) == 3
