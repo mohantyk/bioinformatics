@@ -58,7 +58,12 @@ def peptide_identification(spectral_vec, proteome, amino_mass=AMINO_MASS):
     return final_peptide, best_score
 
 
-def psm_search(spectral_vectors, proteome, threshold):
-    pass
+def psm_search(spectral_vectors, proteome, threshold, amino_mass=AMINO_MASS):
+    psm = set()
+    for vec in spectral_vectors:
+        peptide, score = peptide_identification(vec, proteome, amino_mass)
+        if score >= threshold:
+            psm.add(peptide)
+    return psm
 
 

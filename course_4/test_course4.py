@@ -321,3 +321,12 @@ class TestWeek5:
         example_amino = {'X': 4, 'Z': 5}
         peptide, _ = peptide_identification(spectral_vector, proteome, example_amino)
         assert peptide == 'ZXZXX'
+
+    def test_psm_search(self):
+        vectors = [[-1, 5, -4, 5, 3, -1, -4, 5, -1, 0, 0, 4, -1, 0, 1, 4, 4, 4],
+                    [-4, 2, -2, -4, 4, -5, -1, 4, -1, 2, 5, -3, -1, 3, 2, -3] ]
+        proteome = 'XXXZXZXXZXZXXXZXXZX'
+        threshold = 5
+        example_amino = {'X': 4, 'Z': 5}
+        peptide = psm_search(vectors, proteome, threshold, example_amino)
+        assert peptide == {'XZXZ'}
