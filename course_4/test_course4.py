@@ -335,4 +335,5 @@ class TestWeek5:
         spectral_vector = [4, -3, -2, 3, 3, -4, 5, -3, -1, -1, 3, 4, 1, 3]
         threshold = 1
         max_score = 8
-        assert size_of_spectral_dictionary(spectral_vector, threshold, max_score) == 3
+        example_amino = {'X': 4, 'Z': 5}
+        assert size_of_spectral_dictionary(spectral_vector, threshold, max_score, example_amino) == 3
