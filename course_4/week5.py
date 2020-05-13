@@ -54,8 +54,11 @@ def peptide_identification(spectral_vec, proteome, amino_mass=AMINO_MASS):
                 break
         logger.debug(f'{nodes}\n')
 
-    return ''.join(best_path)
+    final_peptide = ''.join(best_path)
+    return final_peptide, best_score
 
 
+def psm_search(spectral_vectors, proteome, threshold):
+    pass
 
 

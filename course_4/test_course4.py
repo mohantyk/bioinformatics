@@ -319,4 +319,5 @@ class TestWeek5:
         spectral_vector = [0,0,0,4,-2,-3,-1,-7,6,5,3,2,1,9,3,-8,0,3,1,2,1,8]
         proteome = 'XZZXZXXXZXZZXZXXZ'
         example_amino = {'X': 4, 'Z': 5}
-        assert peptide_identification(spectral_vector, proteome, example_amino) == 'ZXZXX'
+        peptide, _ = peptide_identification(spectral_vector, proteome, example_amino)
+        assert peptide == 'ZXZXX'
