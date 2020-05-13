@@ -6,6 +6,7 @@ from week1 import *
 from week2 import *
 from week3 import *
 from week4 import *
+from week5 import *
 
 class TestWeek1:
     def test_distances(self):
@@ -313,3 +314,9 @@ class TestWeek4:
         example_amino = {4: 'X', 5: 'Z'}
         assert peptide_sequencing(spectral_vector, example_amino) == 'XZZXX'
 
+class TestWeek5:
+    def test_peptide_identification(self):
+        spectral_vector = [0,0,0,4,-2,-3,-1,-7,6,5,3,2,1,9,3,-8,0,3,1,2,1,8]
+        proteome = 'XZZXZXXXZXZZXZXXZ'
+        example_amino = {'X': 4, 'Z': 5}
+        assert peptide_identification(spectral_vector, proteome, example_amino) == 'ZXZXX'
