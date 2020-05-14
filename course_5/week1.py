@@ -23,3 +23,6 @@ def farthest_first_traversal(k, m, points):
                 farthest_pt = pt
         centers.add(farthest_pt)
     return centers
+
+def squared_error_distortion(k, m, centers, points):
+    pass
