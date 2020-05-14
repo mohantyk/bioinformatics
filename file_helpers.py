@@ -4,10 +4,10 @@ from collections import defaultdict
 def read_list(list_with_spaces, dtype=int):
     return [dtype(x) for x in list_with_spaces.split()]
 
-def read_matrix(data):
+def read_matrix(data, dtype=int):
     matrix = []
     for line in data.splitlines():
-        matrix.append(read_list(line))
+        matrix.append(read_list(line, dtype))
     return matrix
 
 def get_data(filename):
