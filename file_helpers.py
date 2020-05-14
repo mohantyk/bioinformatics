@@ -1,8 +1,8 @@
 from collections import defaultdict
 
 ## File Read Helpers
-def read_list(list_with_spaces):
-    return [int(x) for x in list_with_spaces.split()]
+def read_list(list_with_spaces, dtype=int):
+    return [dtype(x) for x in list_with_spaces.split()]
 
 def read_matrix(data):
     matrix = []
