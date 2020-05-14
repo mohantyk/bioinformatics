@@ -25,4 +25,10 @@ def farthest_first_traversal(k, m, points):
     return centers
 
 def squared_error_distortion(k, m, centers, points):
-    pass
+    n = len(points)
+    total_dist = 0
+    for pt in points:
+        dist = min(euclidean_dist(pt, center) for center in centers)**2
+        total_dist += dist
+    return total_dist/n
+

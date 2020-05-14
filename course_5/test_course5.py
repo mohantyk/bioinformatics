@@ -1,3 +1,5 @@
+from pytest import approx
+
 from week1 import *
 
 class TestWeek1:
@@ -17,4 +19,4 @@ class TestWeek1:
         points = [  (3.42, 6.03), (6.23, 8.25), (4.76, 1.64),
                     (4.47, 4.33), (3.95, 7.61), (8.93, 2.97),
                     (9.74, 4.03), (1.73, 1.28), (9.72, 5.01), (7.27, 3.77)]
-        assert squared_error_distortion(k, m, centers, points) == 18.246
+        assert squared_error_distortion(k, m, centers, points) == approx(18.246, abs=1e-3)
