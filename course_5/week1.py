@@ -12,7 +12,8 @@ def center_of_gravity(points):
     m = len(points[0])
     center = []
     for idx in range(m):
-        center.append(sum(pt[idx] for pt in points)/n)
+        total = sum(pt[idx] for pt in points)
+        center.append(round(total/n, 3))
     return tuple(center)
 
 
