@@ -59,6 +59,6 @@ def lloyd(k, m, points):
         else:
             centers = new_centers
 
-    return list(centers)
+    return centers
 
 
