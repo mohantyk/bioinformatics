@@ -73,6 +73,7 @@ class ModifiedSuffixTrie(Trie):
             if curr.is_leaf():
                 curr.val = i
 
+
 class SuffixTree:
     def __init__(self, text):
         self.text = text
@@ -96,6 +97,22 @@ class SuffixTree:
             self.replace_non_branching_paths(final)
         node.positions = {} # Reset positions, not needed
 
+    def find_non_branch_edges(self, node):
+        '''
+        output:
+            num_edges: number of edges on non-branching path starting from node
+            final: final node on non-branching path
+        '''
+        curr = node
+        path = []
+        while len(curr.children) == 1:
+            ltr = list(curr.children)[0]
+            path.append(ltr)
+            curr = curr.children[ltr]
+        final = curr
+        num_edges = len(path)
+        return num_edges, final
+
     @property
     def edges(self):
         '''
@@ -114,26 +131,6 @@ class SuffixTree:
         return edges
 
 
-
-    def find_non_branch_edges(self, node):
-        '''
-        output:
-            num_edges: number of edges on non-branching path starting from node
-            final: final node on non-branching path
-        '''
-        curr = node
-        path = []
-        while len(curr.children) == 1:
-            ltr = list(curr.children)[0]
-            path.append(ltr)
-            curr = curr.children[ltr]
-        final = curr
-        num_edges = len(path)
-        return num_edges, final
-
-
-
-
 ###--------------------------------
 ### Functions
 def create_trie(patterns):
@@ -150,7 +147,5 @@ def match_trie(text, patterns):
             matching_indices.append(idx)
     return matching_indices
 
-
-if __name__ == '__main__':
-    text = 'ATAAATG$'
-    suffix_tree = SuffixTree(text)
+def find_longest_repeat(text):
+    pass

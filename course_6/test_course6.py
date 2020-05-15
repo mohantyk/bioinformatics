@@ -25,5 +25,8 @@ class TestWeek1:
         text = 'ATAAATG$'
         suffix_tree = SuffixTree(text)
         edges = ['AAATG$', 'G$', 'T', 'ATG$', 'TG$', 'A', 'A', 'AAATG$', 'G$', 'T', 'G$', '$']
-
         assert Counter(suffix_tree.edges) == Counter(edges)
+
+    def test_longest_repeat(self):
+        text = 'ATATCGTTTTATCGTT'
+        assert find_longest_repeat(text) == 'TATCGT'
