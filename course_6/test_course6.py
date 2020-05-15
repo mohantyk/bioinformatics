@@ -1,3 +1,5 @@
+from collections import Counter
+
 from week1 import *
 
 class TestWeek1:
@@ -18,3 +20,10 @@ class TestWeek1:
         patterns = ['ATCG','GGGT']
         matching_indices = [1, 4, 11, 15]
         assert match_trie(text, patterns) == matching_indices
+
+    def test_suffix_tree(self):
+        text = 'ATAAATG$'
+        suffix_tree = SuffixTree(text)
+        edges = ['AAATG$', 'G$', 'T', 'ATG$', 'TG$', 'A', 'A', 'AAATG$', 'G$', 'T', 'G$', '$']
+
+        assert Counter(suffix_tree.edges) == Counter(edges)
