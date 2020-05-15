@@ -85,7 +85,9 @@ class SuffixTree:
         '''
         Replace any non-branching paths with a single edge
         '''
-        for ltr, child in node.children.items():
+        edges = list(node.children)
+        for ltr in edges: # Can not iterate over dict while changing it
+            child = node.children[ltr]
             num_edges, final = self.find_non_branch_edges(child)
             pos = node.position[ltr]
 
@@ -94,7 +96,8 @@ class SuffixTree:
             self.replace_non_branching_paths(final)
         node.positions = {} # Reset positions, not needed
 
-    def get_edges(self):
+    @property
+    def edges(self):
         '''
         Returns all edges in suffix tree
         '''
@@ -146,3 +149,8 @@ def match_trie(text, patterns):
         if trie.match_prefix(text[idx:]):
             matching_indices.append(idx)
     return matching_indices
+
+
+if __name__ == '__main__':
+    text = 'ATAAATG$'
+    suffix_tree = SuffixTree(text)
