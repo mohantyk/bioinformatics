@@ -11,6 +11,7 @@ class Node:
     def __init__(self, val=None):
         self.val = val
         self.children = {}
+        self.position = {}
 
     def is_leaf(self):
         return len(self.children) == 0
@@ -52,6 +53,28 @@ class Trie:
             graph.add_edge(node.val, child.val, ltr)
             self.create_adjacency(child, graph)
         return graph
+
+
+class ModifiedSuffixTrie(Trie):
+    def __init__(self, text):
+        self.root = Node()
+        self.add_text(text)
+
+    def add_text(self, text):
+        l = len(text)
+        for i, _ in enumerate(text):
+            curr = self.root
+            for j in range(i,l):
+                ch = text[j]
+                if ch not in curr.children:
+                    curr.children[ch] = Node()
+                    curr.position[ch] = j
+                curr = curr.children[ch]
+            if curr.is_leaf():
+                curr.val = i
+
+
+
 
 ###--------------------------------
 ### Functions
