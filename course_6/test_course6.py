@@ -12,3 +12,9 @@ class TestWeek1:
                         7: {8: 'A'},
                         8: {9: 'T'} }
         assert trie.adjacency == adjacency
+
+    def test_trie_matching(self):
+        text = 'AATCGGGTTCAATCGGGGT'
+        patterns = ['ATCG','GGGT']
+        matching_indices = [1, 4, 11, 15]
+        assert match_trie(text, patterns) == matching_indices

@@ -30,6 +30,16 @@ class Trie:
                 curr.children[ch] = nxt
             curr = nxt
 
+    def match_prefix(self, text):
+        curr = self.root
+        for ch in text:
+            if ch not in curr.children:
+                return False
+            curr = curr.children[ch]
+            if curr.is_leaf():
+                return True
+        return False
+
     @property
     def adjacency(self):
         graph = self.create_adjacency(self.root)
@@ -50,3 +60,11 @@ def create_trie(patterns):
     for pattern in patterns:
         trie.add(pattern)
     return trie
+
+def match_trie(text, patterns):
+    trie = create_trie(patterns)
+    matching_indices = []
+    for idx, _ in enumerate(text):
+        if trie.match_prefix(text[idx:]):
+            matching_indices.append(idx)
+    return matching_indices
