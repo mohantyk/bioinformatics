@@ -75,6 +75,7 @@ class ModifiedSuffixTrie(Trie):
 
 class SuffixTree:
     def __init__(self, text):
+        self.text = text
         mod_suffix_trie = ModifiedSuffixTrie(text)
         self.root = mod_suffix_trie.root
         self.replace_non_branching_paths(self.root)
@@ -92,6 +93,23 @@ class SuffixTree:
             node.children[(pos, num_edges+1)] = final
             self.replace_non_branching_paths(final)
         node.positions = {} # Reset positions, not needed
+
+    def get_edges(self):
+        '''
+        Returns all edges in suffix tree
+        '''
+        return self._edges_at_node(self.root)
+
+    def _edges_at_node(self, node):
+        '''
+        Returns all edges in sub-tree starting from node
+        '''
+        edges = []
+        for (pos, num_edges), child in node.children.items():
+            edges.append(self.text[pos:pos+num_edges])
+            edges += self._edges_at_node(child)
+        return edges
+
 
 
     def find_non_branch_edges(self, node):
