@@ -3,7 +3,7 @@ import itertools
 
 import sys
 sys.path.append('..')
-from course_4.week2 import Tree as Graph
+from course_4.week4 import DirectedGraph
 
 ###------------------------------
 ### Useful classes
@@ -29,6 +29,19 @@ class Trie:
                 nxt = Node(next(self.counter))
                 curr.children[ch] = nxt
             curr = nxt
+
+    @property
+    def adjacency(self):
+        graph = self.create_adjacency(self.root)
+        return graph.adjacency
+
+    def create_adjacency(self, node, graph=None):
+        if graph is None:
+            graph = DirectedGraph()
+        for ltr, child in node.children.items():
+            graph.add_edge(node.val, child.val, ltr)
+            self.create_adjacency(child, graph)
+        return graph
 
 ###--------------------------------
 ### Functions

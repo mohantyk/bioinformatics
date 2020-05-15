@@ -1,7 +1,7 @@
 from collections import deque
 from math import inf
 
-from week2 import Tree
+from .week2 import Tree
 
 import sys
 sys.path.append('..')
