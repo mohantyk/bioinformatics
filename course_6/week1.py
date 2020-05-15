@@ -73,6 +73,43 @@ class ModifiedSuffixTrie(Trie):
             if curr.is_leaf():
                 curr.val = i
 
+class SuffixTree:
+    def __init__(self, text):
+        mod_suffix_trie = ModifiedSuffixTrie(text)
+        self.root = mod_suffix_trie.root
+        self.replace_non_branching_paths(self.root)
+
+
+    def replace_non_branching_paths(self, node):
+        '''
+        Replace any non-branching paths with a single edge
+        '''
+        for ltr, child in node.children.items():
+            num_edges, final = self.find_non_branch_edges(child)
+            pos = node.position[ltr]
+
+            del node.children[ltr]
+            node.children[(pos, num_edges+1)] = final
+            self.replace_non_branching_paths(final)
+        node.positions = {} # Reset positions, not needed
+
+
+    def find_non_branch_edges(self, node):
+        '''
+        output:
+            num_edges: number of edges on non-branching path starting from node
+            final: final node on non-branching path
+        '''
+        curr = node
+        path = []
+        while len(curr.children) == 1:
+            ltr = list(curr.children)[0]
+            path.append(ltr)
+            curr = curr.children[ltr]
+        final = curr
+        num_edges = len(path)
+        return num_edges, final
+
 
 
 
