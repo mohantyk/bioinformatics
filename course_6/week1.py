@@ -1,12 +1,19 @@
 from collections import defaultdict
 import itertools
 
+import sys
+sys.path.append('..')
+from course_4.week2 import Tree as Graph
+
 ###------------------------------
 ### Useful classes
 class Node:
     def __init__(self, val=None):
         self.val = val
         self.children = {}
+
+    def is_leaf(self):
+        return len(self.children) == 0
 
 
 class Trie:
