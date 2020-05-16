@@ -1,4 +1,5 @@
 from collections import defaultdict
+from math import inf
 import itertools
 
 import sys
@@ -76,6 +77,9 @@ class ModifiedSuffixTrie(Trie):
 
 class SuffixTree:
     def __init__(self, text):
+        '''
+        Children keys are now (pos, len) tuples
+        '''
         self.text = text
         mod_suffix_trie = ModifiedSuffixTrie(text)
         self.root = mod_suffix_trie.root
@@ -130,6 +134,24 @@ class SuffixTree:
             edges += self._edges_at_node(child)
         return edges
 
+    def longest_repeat(self):
+        return self._longest_path_to_fork(self.root)
+
+
+    def _longest_path_to_fork(self, node):
+        longest = -inf
+        best_path = ''
+        #all_edges = [self.text[pos: pos+num_edges] for (pos, num_edges) in node.children]
+        #leafs = [child.is_leaf() for child in node.children.values()]
+        for (pos, num_edges), child in node.children.items():
+            if not child.is_leaf():
+                child_path = self._longest_path_to_fork(child)
+                path_len = num_edges + len(child_path)
+                if path_len > longest:
+                    longest = path_len
+                    best_path = self.text[pos:pos+num_edges] + child_path
+        return best_path
+
 
 ###--------------------------------
 ### Functions
@@ -147,5 +169,8 @@ def match_trie(text, patterns):
             matching_indices.append(idx)
     return matching_indices
 
-def find_longest_repeat(text):
-    pass
+
+if __name__ == '__main__':
+    text = 'ATATCGTTTTATCGTT'
+    suffix_tree = SuffixTree(text)
+    assert suffix_tree.longest_repeat() == 'TATCGTT'

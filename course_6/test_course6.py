@@ -29,4 +29,5 @@ class TestWeek1:
 
     def test_longest_repeat(self):
         text = 'ATATCGTTTTATCGTT'
-        assert find_longest_repeat(text) == 'TATCGT'
+        suffix_tree = SuffixTree(text)
+        assert suffix_tree.longest_repeat() == 'TATCGTT'
