@@ -188,6 +188,27 @@ class ColoredSuffixTree(SuffixTree):
             node.color = 'purple'
         return node.color
 
+    def longest_shared_substring(self):
+        self.color_nodes()
+        return self.longest_path_to_purple(self.root)
+
+
+    def longest_path_to_purple(self, node):
+        '''
+        Find path to farthest purple child from node
+        '''
+        longest = -inf
+        best_path = ''
+        for (pos, num_edges), child in node.children.items():
+            edge = self.text[pos:pos+num_edges]
+            if child.color == 'purple':
+                child_path = self.longest_path_to_purple(child)
+                path_len = num_edges + len(child_path)
+                if path_len > longest:
+                    longest = path_len
+                    best_path = edge + child_path
+        return best_path
+
 
 
 
@@ -212,5 +233,6 @@ def match_trie(text, patterns):
 
 def longest_shared_substring(text1, text2):
     concatenated = text1 + '#' + text2 + '$'
-    suffix_tree = SuffixTree(concatenated)
+    suffix_tree = ColoredSuffixTree(concatenated)
+    return suffix_tree.longest_shared_substring()
 

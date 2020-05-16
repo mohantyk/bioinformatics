@@ -35,4 +35,4 @@ class TestWeek1:
     def test_longest_shared_substring(self):
         text_1 = 'TCGGTAGATTGCGCCCACTC'
         text_2 = 'AGGGGCTCGCAGTGTAAGAA'
-        longest_shared_substring(text_1, text_2) == 'AGA'
+        assert longest_shared_substring(text_1, text_2) == 'TCG' # AGA is another solution
