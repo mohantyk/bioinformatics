@@ -80,6 +80,8 @@ class SuffixTree:
         '''
         Children keys are now (pos, len) tuples
         '''
+        if text[-1] != '$': # Use $ as a text-end marker
+            text += '$'
         self.text = text
         mod_suffix_trie = ModifiedSuffixTrie(text)
         self.root = mod_suffix_trie.root
@@ -135,21 +137,26 @@ class SuffixTree:
         return edges
 
     def longest_repeat(self):
+        '''
+        Find longest repeated substring
+        '''
         return self._longest_path_to_fork(self.root)
 
 
     def _longest_path_to_fork(self, node):
+        '''
+        Find path to farthest fork from node
+        '''
         longest = -inf
         best_path = ''
-        #all_edges = [self.text[pos: pos+num_edges] for (pos, num_edges) in node.children]
-        #leafs = [child.is_leaf() for child in node.children.values()]
         for (pos, num_edges), child in node.children.items():
+            edge = self.text[pos:pos+num_edges]
             if not child.is_leaf():
                 child_path = self._longest_path_to_fork(child)
                 path_len = num_edges + len(child_path)
                 if path_len > longest:
                     longest = path_len
-                    best_path = self.text[pos:pos+num_edges] + child_path
+                    best_path = edge + child_path
         return best_path
 
 
