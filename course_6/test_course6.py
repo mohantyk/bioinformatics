@@ -31,3 +31,8 @@ class TestWeek1:
         text = 'ATATCGTTTTATCGTT'
         suffix_tree = SuffixTree(text)
         assert suffix_tree.longest_repeat() == 'TATCGTT'
+
+    def test_longest_shared_substring(self):
+        text_1 = 'TCGGTAGATTGCGCCCACTC'
+        text_2 = 'AGGGGCTCGCAGTGTAAGAA'
+        longest_shared_substring(text_1, text_2) == 'AGA'
