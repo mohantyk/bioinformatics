@@ -13,6 +13,7 @@ class Node:
         self.val = val
         self.children = {}
         self.position = {}
+        self.color = None
 
     def is_leaf(self):
         return len(self.children) == 0
@@ -160,6 +161,38 @@ class SuffixTree:
         return best_path
 
 
+class ColoredSuffixTree(SuffixTree):
+    def color_nodes(self, node=None):
+        sep = self.text.index('#') # Use '#' as separator between two texts
+        assert sep != -1
+
+        if node == None:
+            node = self.root
+
+        if node.is_leaf():
+            node.color = 'blue' if node.val <= sep else 'red'
+            return node.color
+
+        child_colors = set()
+        for child in node.children.values():
+            if child.color is None:
+                self.color_nodes(child)
+            child_colors.add(child.color)
+
+        assert None not in child_colors
+        if child_colors == {'blue'}:
+            node.color = 'blue'
+        elif child_colors == {'red'}:
+            node.color = 'red'
+        else:
+            node.color = 'purple'
+        return node.color
+
+
+
+
+
+
 ###--------------------------------
 ### Functions
 def create_trie(patterns):
@@ -177,7 +210,7 @@ def match_trie(text, patterns):
     return matching_indices
 
 
-if __name__ == '__main__':
-    text = 'ATATCGTTTTATCGTT'
-    suffix_tree = SuffixTree(text)
-    assert suffix_tree.longest_repeat() == 'TATCGTT'
+def longest_shared_substring(text1, text2):
+    concatenated = text1 + '#' + text2 + '$'
+    suffix_tree = SuffixTree(concatenated)
+
