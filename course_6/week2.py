@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 def suffix_array(text):
     idx_to_suffix = {idx: text[idx:] for idx, _ in enumerate(text)}
     arr = list(sorted(idx_to_suffix, key=idx_to_suffix.get))
@@ -36,8 +38,46 @@ def invert_bwt(bwt):
     return text
 
 
-def bw_match(bw_test, pattern):
-    pass
+def bw_match(bw_text, pattern):
+    '''
+    Returns num of places the pattern matches the text encoded by bw_text
+    '''
+    first_col = ''.join(sorted(bw_text))
+    last_col = bw_text
+
+    first_col_indices = defaultdict(list) # Indices of each character in first_col
+    for idx, ch in enumerate(first_col):
+        first_col_indices[ch].append(idx)
+
+    last_to_first = {} # Mapping from last col index to first col index
+    last_col_counts = defaultdict(int)
+    for idx, ch in enumerate(last_col):
+        count = last_col_counts[ch]
+        first_col_idx = first_col_indices[ch][count]
+        last_to_first[idx] = first_col_idx
+        last_col_counts[ch] += 1
+
+    lpattern = list(pattern)
+    top = 0
+    bottom = len(first_col) - 1
+    while top <= bottom:
+        if lpattern:
+            ltr = lpattern.pop()
+            match_against = last_col[top:bottom+1]
+            if ltr in match_against:
+                first_idx = top+match_against.index(ltr)
+                top = last_to_first[first_idx]
+
+                reversed_idx = match_against[::-1].index(ltr)
+                last_idx = bottom - reversed_idx
+                bottom = last_to_first[last_idx]
+            else:
+                return 0
+
+        else:
+            return bottom - top + 1
+
+
 
 def match_patterns(bw_text, patterns):
     num_matches = [bw_match(bw_text, pattern) for pattern in patterns]
