@@ -4,4 +4,7 @@ def suffix_array(text):
     return arr
 
 def burrows_wheeler_transform(text):
-    pass
+    cyclic_shifts = [text[shift:] + text[:shift] for shift in range(len(text))]
+    lexic_shifts = sorted(cyclic_shifts)
+    bwt = ''.join([pattern[-1] for pattern in lexic_shifts])
+    return bwt
