@@ -1,2 +1,4 @@
 def suffix_array(text):
-    pass
+    idx_to_suffix = {idx: text[idx:] for idx, _ in enumerate(text)}
+    arr = list(sorted(idx_to_suffix, key=idx_to_suffix.get))
+    return arr
