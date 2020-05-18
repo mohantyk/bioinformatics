@@ -43,3 +43,8 @@ class TestWeek2:
         text = 'AACGATAGCGGTAGA$'
         expected = [15, 14, 0, 1, 12, 6, 4, 2, 8, 13, 3, 7, 9, 10, 11, 5]
         assert suffix_array(text) == expected
+
+    def test_burrows_wheeler_transform(self):
+        text = 'GCGTGCCTGGTCA$'
+        bwt = 'ACTGGCT$TGCGGC'
+        assert burrows_wheeler_transform(text) == bwt
