@@ -1,6 +1,7 @@
 from collections import Counter
 
 from week1 import *
+from week2 import *
 
 class TestWeek1:
     def test_trie_creation(self):
@@ -36,3 +37,9 @@ class TestWeek1:
         text_1 = 'TCGGTAGATTGCGCCCACTC'
         text_2 = 'AGGGGCTCGCAGTGTAAGAA'
         assert longest_shared_substring(text_1, text_2) == 'TCG' # AGA is another solution
+
+class TestWeek2:
+    def test_suffix_array(self):
+        text = 'AACGATAGCGGTAGA$'
+        expected = [15, 14, 0, 1, 12, 6, 4, 2, 8, 13, 3, 7, 9, 10, 11, 5]
+        assert suffix_array(text) == expected
