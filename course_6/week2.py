@@ -8,3 +8,6 @@ def burrows_wheeler_transform(text):
     lexic_shifts = sorted(cyclic_shifts)
     bwt = ''.join([pattern[-1] for pattern in lexic_shifts])
     return bwt
+
+def invert_bwt(bwt):
+    pass

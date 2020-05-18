@@ -48,3 +48,8 @@ class TestWeek2:
         text = 'GCGTGCCTGGTCA$'
         bwt = 'ACTGGCT$TGCGGC'
         assert burrows_wheeler_transform(text) == bwt
+
+    def test_invert_bwt(self):
+        bwt = 'TTCCTAACG$A'
+        text = 'TACATCACGT$'
+        assert invert_bwt(bwt) == text
