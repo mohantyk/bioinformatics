@@ -53,3 +53,9 @@ class TestWeek2:
         bwt = 'TTCCTAACG$A'
         text = 'TACATCACGT$'
         assert invert_bwt(bwt) == text
+
+    def test_bw_matching(self):
+        bwt = 'TCCTCTATGAGATCCTATTCTATGAAACCTTCA$GACCAAAATTCTCCGGC'
+        patterns = ['CCT', 'CAC', 'GAG', 'CAG', 'ATC']
+        num_matches = [2,1,1,0,1]
+        assert match_patterns(bwt, patterns) == num_matches

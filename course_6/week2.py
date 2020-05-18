@@ -34,3 +34,11 @@ def invert_bwt(bwt):
     first_row = first_row + last_col[0] # Add the last character of first row
     text = first_row[1:] + first_row[0] # Move the $ to the end
     return text
+
+
+def bw_match(bw_test, pattern):
+    pass
+
+def match_patterns(bw_text, patterns):
+    num_matches = [bw_match(bw_text, pattern) for pattern in patterns]
+    return num_matches
