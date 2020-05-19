@@ -120,7 +120,7 @@ def outcome_likelihood(emitted, alphabet, states, transitions, emissions):
     graph = np.zeros((len(states), len(emitted)), dtype=float)
     for idx, ltr in enumerate(emitted):
         if idx == 0:
-            graph[:, idx] = emission_prob.loc[:, ltr]
+            graph[:, idx] = emission_prob.loc[:, ltr]*(1/len(states))
             continue
         for s_idx, state in enumerate(states):
             graph[s_idx, idx] = np.dot(graph[:,idx-1], transition_prob.loc[:,state].values) * emission_prob.loc[state, ltr]
