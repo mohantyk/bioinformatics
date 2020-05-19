@@ -112,4 +112,16 @@ def viterbi(emitted, alphabet, states, transitions, emissions):
     return final
 
 
+def outcome_likelihood(emitted, alphabet, states, transitions, emissions):
+    transition_prob = pd.DataFrame( data=transitions, columns=list(states), index=list(states) )
+    emission_prob = pd.DataFrame( data=emissions, columns=list(alphabet), index=list(states))
 
+    graph = np.zeros((len(states), len(emitted)), dtype=float)
+    for idx, ltr in enumerate(emitted):
+        if idx == 0:
+            graph[:, idx] = emission_prob.loc[:, ltr]
+            continue
+        for s_idx, state in enumerate(states):
+            graph[s_idx, idx] = np.dot(graph[:,idx-1], transition_prob.loc[:,state].values) * emission_prob.loc[state, ltr]
+    final = np.sum(graph[:,-1])
+    return final

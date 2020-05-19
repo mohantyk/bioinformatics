@@ -73,3 +73,15 @@ class TestWeek4:
         best_path = 'AAABBAAAAA'
 
         assert viterbi(emitted, alphabet, states, transitions, emissions) == best_path
+
+    def test_outcome_likelihood(self):
+        emitted = 'xzyyzzyzyy'
+        alphabet = 'xyz'
+        states = 'AB'
+        transitions = [ [0.303, 0.697],
+                        [0.831, 0.169] ]
+        emissions = [   [0.533,0.065,0.402],
+                        [0.342,0.334,0.324] ]
+        likelihood = 1.1005510319694847e-06
+
+        assert outcome_likelihood(emitted, alphabet, states, transitions, emissions) == likelihood
