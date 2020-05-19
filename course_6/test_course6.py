@@ -59,3 +59,17 @@ class TestWeek2:
         patterns = ['CCT', 'CAC', 'GAG', 'CAG', 'ATC']
         num_matches = [2,1,1,0,1]
         assert match_patterns(bwt, patterns) == num_matches
+
+
+class TestWeek4:
+    def test_viterbi(self):
+        emitted = 'xyxzzxyxyy'
+        alphabet = 'xyz'
+        states = 'AB'
+        transitions = [ [0.641, 0.359],
+                        [0.729, 0.271] ]
+        emissions = [   [0.117,0.691,0.192],
+                        [0.097,0.42,0.483] ]
+        best_path = 'AAABBAAAAA'
+
+        assert viterbi(emitted, alphabet, states, transitions, emissions) == best_path

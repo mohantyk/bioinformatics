@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+import pandas as pd
+
 def suffix_array(text):
     idx_to_suffix = {idx: text[idx:] for idx, _ in enumerate(text)}
     arr = list(sorted(idx_to_suffix, key=idx_to_suffix.get))
@@ -78,7 +80,11 @@ def bw_match(bw_text, pattern):
             return bottom - top + 1
 
 
-
 def match_patterns(bw_text, patterns):
     num_matches = [bw_match(bw_text, pattern) for pattern in patterns]
     return num_matches
+
+def viterbi(emitted, alphabet, states, transitions, emissions):
+    transition_prob = pd.DataFrame( data=transitions, columns=list(states), index=list(states) )
+    emission_prob = pd.DataFrame( data=emissions, columns=list(alphabet), index=list(states))
+
