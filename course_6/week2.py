@@ -93,7 +93,8 @@ def viterbi(emitted, alphabet, states, transitions, emissions):
     backtrack = np.empty((len(states), len(emitted)), dtype=str)
     for idx, ltr in enumerate(emitted):
         if idx == 0:
-            graph[:, idx] = np.log(emission_prob.loc[:, ltr])
+            graph[:, idx] = np.log(emission_prob.loc[:, ltr]*1/len(states))
+            continue
         for s_idx, state in enumerate(states):
             all_links = graph[:,idx-1] + np.log(transition_prob.loc[:,state].values) + np.log(emission_prob.loc[state, ltr])
             graph[s_idx, idx] = np.max(all_links)
@@ -108,7 +109,7 @@ def viterbi(emitted, alphabet, states, transitions, emissions):
         state = backtrack[s_idx, idx]
         path.append(state)
 
-    final = ''.join(path[::-1])[1:] # Remove backtrack of first state
+    final = ''.join(path[::-1])
     return final
 
 
