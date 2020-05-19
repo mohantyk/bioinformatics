@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 import pandas as pd
+import numpy as np
 
 def suffix_array(text):
     idx_to_suffix = {idx: text[idx:] for idx, _ in enumerate(text)}
@@ -87,4 +88,28 @@ def match_patterns(bw_text, patterns):
 def viterbi(emitted, alphabet, states, transitions, emissions):
     transition_prob = pd.DataFrame( data=transitions, columns=list(states), index=list(states) )
     emission_prob = pd.DataFrame( data=emissions, columns=list(alphabet), index=list(states))
+
+    graph = np.zeros((len(states), len(emitted)), dtype=float)
+    backtrack = np.empty((len(states), len(emitted)), dtype=str)
+    for idx, ltr in enumerate(emitted):
+        if idx == 0:
+            continue
+        for s_idx, state in enumerate(states):
+            all_links = graph[:,idx-1] + np.log(transition_prob.loc[:,state].values) + np.log(emission_prob.loc[state, ltr])
+            graph[s_idx, idx] = np.max(all_links)
+            backtrack[s_idx, idx] = states[np.argmax(all_links)]
+
+    path = []
+    s_idx = np.argmax(graph[:, -1])
+    state = states[s_idx]
+    path.append(state)
+    for idx in reversed(range(len(emitted))):
+        s_idx = states.index(state)
+        state = backtrack[s_idx, idx]
+        path.append(state)
+
+    final = ''.join(path[::-1])
+    return final
+
+
 
