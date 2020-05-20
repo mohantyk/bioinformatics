@@ -1,4 +1,6 @@
 from collections import defaultdict
+from itertools import chain
+import pandas as pd
 
 def create_profile_hmm(alignment, threshold, alphabet):
     star_alignment = set()
@@ -8,6 +10,9 @@ def create_profile_hmm(alignment, threshold, alphabet):
                             if pattern[idx] == '-')
         if deletions <= threshold * num_patterns:
             star_alignment.add(idx)
+
+    nodes = ['S', 'I0'] + list(chain.from_iterable(('M'+str(count+1), 'D'+str(count+1), 'I'+str(count+1))
+                                                    for count in range(len(star_alignment)))) + ['E']
 
     paths = []
     for pattern in alignment:
@@ -27,6 +32,28 @@ def create_profile_hmm(alignment, threshold, alphabet):
         path.append('E')
         paths.append(path)
 
+    incoming = defaultdict(int)
+    outgoing = defaultdict(dict)
+    for path in paths:
+        for idx, src in enumerate(path[:-1]):
+            dst = path[idx+1]
+            incoming[dst] += 1
+            if dst in outgoing[src]:
+                outgoing[src][dst] += 1
+            else:
+                outgoing[src][dst] = 1
+    print(incoming)
+    print(outgoing)
+
+    transitions = pd.DataFrame(0, columns=nodes, index=nodes, dtype=float)
+    for node in nodes:
+        denom = incoming[node]
+        if denom == 0:
+            continue
+        for out, edges in outgoing[node].items():
+            transitions.loc[node, out] = edges/denom
+
+    return transitions, None
 
 
 
