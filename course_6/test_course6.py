@@ -1,8 +1,9 @@
 from collections import Counter
+import pandas as pd
 
 from week1 import *
 from week2 import *
-
+from week5 import *
 class TestWeek1:
     def test_trie_creation(self):
         patterns = ['ATAGA', 'ATC', 'GAT']
@@ -85,3 +86,32 @@ class TestWeek4:
         likelihood = 1.1005510319694847e-06
 
         assert outcome_likelihood(emitted, alphabet, states, transitions, emissions) == likelihood
+
+
+class TestWeek5:
+    def test_profile_hmm(self):
+        threshold = 0.289
+        alphabet = 'ABCDE'
+        multiple_alignment = ['EBA', 'E-D', 'EB-', 'EED', 'EBD', 'EBE', 'E-D', 'E-D']
+
+        # Expected HMM
+        nodes = ['S', 'I0', 'M1', 'D1', 'I1', 'M2', 'D2', 'I2', 'E']
+        transitions = pd.DataFrame(0, columns=nodes, index=nodes, dtype=float)
+        transitions.loc['M1', 'I1'] = 0.625
+        transitions.loc['M1', 'M2'] = 0.375
+        transitions.loc['I1', 'M2'] = 0.8
+        transitions.loc['I1', 'D2'] = 0.2
+        transitions.loc['M2', 'E'] = 1.0
+        transitions.loc['D2', 'E'] = 1.0
+
+        emissions = pd.DataFrame(0, index=nodes, columns=list(alphabet), dtype=float)
+        emissions.loc['M1', 'E'] = 1.0
+        emissions.loc['I1', 'B'] = 0.8
+        emissions.loc['I1', 'E'] = 0.2
+        emissions.loc['M2', 'A'] = 0.143
+        emissions.loc['M2', 'D'] = 0.714
+        emissions.loc['M2', 'E'] = 0.143
+
+        calc_transitions, calc_emissions = create_profile_hmm(multiple_alignment, threshold, multiple_alignment)
+        assert transitions.equals(calc_transitions)
+        assert emissions.equals(calc_emissions)
