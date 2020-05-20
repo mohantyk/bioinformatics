@@ -3,6 +3,7 @@ import pandas as pd
 
 from week1 import *
 from week2 import *
+from week4 import *
 from week5 import *
 class TestWeek1:
     def test_trie_creation(self):
