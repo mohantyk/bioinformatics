@@ -98,6 +98,7 @@ class TestWeek5:
         # Expected HMM
         nodes = ['S', 'I0', 'M1', 'D1', 'I1', 'M2', 'D2', 'I2', 'E']
         transitions = pd.DataFrame(0, columns=nodes, index=nodes, dtype=float)
+        transitions.loc['S', 'M1'] = 1.0
         transitions.loc['M1', 'I1'] = 0.625
         transitions.loc['M1', 'M2'] = 0.375
         transitions.loc['I1', 'M2'] = 0.8

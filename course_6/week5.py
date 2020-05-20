@@ -39,7 +39,7 @@ def create_profile_hmm(alignment, threshold, alphabet):
     # Calculate final emissions probabilities
     emissions = emissions.div(emissions.sum(axis=1), axis=0).fillna(0).round(3)
 
-    incoming = defaultdict(int)
+    incoming = defaultdict(int); incoming['S'] = len(paths)
     outgoing = defaultdict(dict)
     for path in paths:
         for idx, src in enumerate(path[:-1]):
