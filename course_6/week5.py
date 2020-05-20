@@ -58,5 +58,6 @@ def create_profile_hmm(alignment, threshold, alphabet):
             continue
         for out, edges in outgoing[node].items():
             transitions.loc[node, out] = edges/denom
+    transitions = transitions.round(3)
 
     return transitions, emissions
