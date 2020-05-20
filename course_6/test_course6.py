@@ -113,6 +113,6 @@ class TestWeek5:
         emissions.loc['M2', 'D'] = 0.714
         emissions.loc['M2', 'E'] = 0.143
 
-        calc_transitions, calc_emissions = create_profile_hmm(multiple_alignment, threshold, multiple_alignment)
+        calc_transitions, calc_emissions = create_profile_hmm(multiple_alignment, threshold, alphabet)
         assert transitions.equals(calc_transitions)
         assert emissions.equals(calc_emissions)

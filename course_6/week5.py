@@ -15,22 +15,29 @@ def create_profile_hmm(alignment, threshold, alphabet):
                                                     for count in range(len(star_alignment)))) + ['E']
 
     paths = []
+    emissions = pd.DataFrame(0, columns=list(alphabet), index=nodes, dtype=float)
     for pattern in alignment:
         path = ['S']
         curr = 0
         for idx, ltr in enumerate(pattern):
             if idx in star_alignment:
                 curr += 1
-                if ltr != '-':
-                    path.append('M'+str(curr)) # Letter emitted
+                if ltr != '-': # Letter emitted
+                    node = 'M'+str(curr)
+                    emissions.loc[node, ltr] += 1
+                    path.append(node)
                 else:
                     path.append('D'+str(curr)) # Deletion
 
             else:
-                if ltr != '-':
-                    path.append('I'+str(curr)) # Insertion
+                if ltr != '-': # Letter emitted
+                    node = 'I'+str(curr)
+                    emissions.loc[node, ltr] += 1
+                    path.append(node)
         path.append('E')
         paths.append(path)
+    # Calculate final emissions probabilities
+    emissions = emissions.div(emissions.sum(axis=1), axis=0).fillna(0).round(3)
 
     incoming = defaultdict(int)
     outgoing = defaultdict(dict)
@@ -42,9 +49,8 @@ def create_profile_hmm(alignment, threshold, alphabet):
                 outgoing[src][dst] += 1
             else:
                 outgoing[src][dst] = 1
-    print(incoming)
-    print(outgoing)
 
+    # Calculate final transition probabilities
     transitions = pd.DataFrame(0, columns=nodes, index=nodes, dtype=float)
     for node in nodes:
         denom = incoming[node]
@@ -53,12 +59,4 @@ def create_profile_hmm(alignment, threshold, alphabet):
         for out, edges in outgoing[node].items():
             transitions.loc[node, out] = edges/denom
 
-    return transitions, None
-
-
-
-if __name__ == '__main__':
-    threshold = 0.289
-    alphabet = 'ABCDE'
-    multiple_alignment = ['EBA', 'E-D', 'EB-', 'EED', 'EBD', 'EBE', 'E-D', 'E-D']
-    create_profile_hmm(multiple_alignment, threshold, multiple_alignment)
+    return transitions, emissions
